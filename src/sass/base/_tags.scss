@@ -1,0 +1,46 @@
+
+* {
+  box-sizing: border-box
+}
+
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+
+body {
+  min-width: 320px;
+  position: relative;
+  font-family: $roboto;
+  background-color: #fff;
+  color: #000;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+img {
+  max-width: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+button {
+  padding: 0;
+  outline: none;
+}
+
+ol,
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+p {
+  margin: 0;
+}
