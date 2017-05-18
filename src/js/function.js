@@ -4,13 +4,18 @@
 
 	let images = document.querySelectorAll('.photo');
 	let overlay = document.querySelector('.overlay');
+	let slides = document.querySelectorAll('.slide');
+	let next = document.querySelector('#next');
+	let previous = document.querySelector('#previous');
+	let controls = document.querySelectorAll('.controls');
+	let currentSlide = 0;
+
 
 	images.forEach(function(image, index) {
 		image.addEventListener('click', function(event) {
 			showModal(index);
 		});
 	});
-
 
 	function showModal(index) {
 		overlay.classList.toggle('is-show');
@@ -20,13 +25,6 @@
 	// overlay.addEventListener('click', function() {
 	// 	this.classList.toggle('is-show');
 	// });
-
-
-	let slides = document.querySelectorAll('.slide');
-	let next = document.querySelector('#next');
-	let previous = document.querySelector('#previous');
-	let controls = document.querySelectorAll('.controls');
-	let currentSlide = 0;
 
 
 	function nextSlide() {

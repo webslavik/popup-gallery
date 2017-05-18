@@ -38,6 +38,9 @@
 
 
 .overlay {
+	display: flex;
+	justify-content: center;
+	align-items: center;
   position: absolute;
   top: 0;
   left: 0;
@@ -54,12 +57,41 @@
   }
 }
 
+.overlay-content {
+	max-width: 720px;
+	width: 100%;
+	position: relative;
+}
+
+.controls {
+	position: absolute;
+	top: calc(50% - 10px);
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+
+	svg {
+		width: 40px;
+		height: 40px;
+		fill: $white;
+	}
+}
+
+
+.controls-prev {
+	left: -56px;
+	transform: rotate(-180deg);
+}
+
+.controls-next {
+	right: -56px;
+}
+
 .slides-list {
+	width: 100%;
+  height: 480px;
+
   position: relative;
-  height: 300px;
-  padding: 0px;
-  margin: 0px;
-  list-style-type: none;
 }
 
 .slide {
@@ -69,14 +101,13 @@
   width: 100%;
   height: 100%;
   opacity: 0;
-  // z-index: 1;
   transition: opacity 1s;
 
   &.is-show {
     opacity: 1;
-    // z-index: 2;
   }
 }
+
 
 
 // for example
