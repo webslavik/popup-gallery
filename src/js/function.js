@@ -15,35 +15,32 @@
 
 	images.forEach(function(image, index) {
 		image.addEventListener('click', function(event) {
-			showModal(index);
+			currentSlide = index;
+			showModal();
 			createSlide();
 		});
 	});
 
-	function showModal(index) {
+	function showModal() {
 		overlay.classList.add('is-show');
 	}
 
 	function createSlide() {
 		getImagesLink();
 
-		if (imagesLink.length) {
-			for (let i = 0; i < imagesLink.length; i++) {
-				let li = document.createElement('li');
-				let img = document.createElement('img');
+		for (let i = 0; i < imagesLink.length; i++) {
+			let li = document.createElement('li');
+			let img = document.createElement('img');
 
-				if (i == 0)
-					li.classList.add('slide', 'is-show');
-				else		
-					li.classList.add('slide');
+			if (i == currentSlide)
+				li.classList.add('slide', 'is-show');
+			else		
+				li.classList.add('slide');
 
-				img.setAttribute('src', imagesLink[i]);
+			img.setAttribute('src', imagesLink[i]);
 
-				li.appendChild(img);
-				slideList.appendChild(li);
-			}
-		} else {
-				console.error('List is empy (ノ_<。)');
+			li.appendChild(img);
+			slideList.appendChild(li);
 		}
 
 		slide = document.querySelectorAll('.slide');
