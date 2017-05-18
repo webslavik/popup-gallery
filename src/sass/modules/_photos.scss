@@ -1,60 +1,112 @@
 .photos-list {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	max-width: 880px;
-	padding-top: 40px;
-
-	li:nth-child(2n) {
-		margin-right: 0;
-	}
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 880px;
+  padding-top: 40px;
+  li:nth-child(2n) {
+    margin-right: 0;
+  }
 }
 
 .photo {
-	max-width: 420px;
-	width: 100%;
-	height: 280px;
-	margin-right: 40px;
-	margin-bottom: 40px;
-	cursor: pointer;
-	position: relative;
-	user-select: none;
-
-	&:hover {
-		.thumb {
-			opacity: 1;
-		}
-	}
+  max-width: 420px;
+  width: 100%;
+  height: 280px;
+  margin-right: 40px;
+  margin-bottom: 40px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  &:hover {
+    .thumb {
+      opacity: 1;
+    }
+  }
 }
 
 .thumb {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: rgba($black, .5);
-
-	opacity: 0;
-	transition: all 200ms ease-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($black, .5);
+  opacity: 0;
+  transition: all 200ms ease-out;
 }
 
 
 .overlay {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-
-	background-color: rgba($black, 0.6);
-	transition: all 200ms ease-out;
-	user-select: none;
-	opacity: 0;
-	pointer-events: none;
-
-	&.is-show {
-		opacity: 1;
-		pointer-events: auto;		
-	}
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($black, 0.6);
+  transition: all 200ms ease-out;
+  user-select: none;
+  opacity: 0;
+  pointer-events: none;
+  &.is-show {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
+
+.slides-list {
+  position: relative;
+  height: 300px;
+  padding: 0px;
+  margin: 0px;
+  list-style-type: none;
+}
+
+.slide {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  // z-index: 1;
+  transition: opacity 1s;
+
+  &.is-show {
+    opacity: 1;
+    // z-index: 2;
+  }
+}
+
+
+// for example
+//----------------------------------
+.slide {
+  font-size: 40px;
+  padding: 40px;
+  box-sizing: border-box;
+  background: #333;
+  color: #fff;
+}
+
+.slide:nth-of-type(1) {
+  background: red;
+}
+
+.slide:nth-of-type(2) {
+  background: orange;
+}
+
+.slide:nth-of-type(3) {
+  background: green;
+}
+
+.slide:nth-of-type(4) {
+  background: blue;
+}
+
+.slide:nth-of-type(5) {
+  background: purple;
+}
+
+
