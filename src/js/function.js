@@ -21,7 +21,7 @@
 	});
 
 	function showModal(index) {
-		overlay.classList.toggle('is-show');
+		overlay.classList.add('is-show');
 	}
 
 	function createSlide() {
@@ -61,12 +61,12 @@
 
 
 	overlay.addEventListener('click', function(evet) {
-		// let children = overlay.querySelectorAll('*');
-		this.classList.toggle('is-show');
-		imagesLink = [];
+		if (!evet.target.classList.contains('overlay'))
+			return false;
 
+		this.classList.remove('is-show');
+		imagesLink = [];
 		removeslideChildren();
-		// console.log(evet);
 	});
 
 	function removeslideChildren() {
@@ -89,8 +89,7 @@
 		slide[currentSlide].classList.remove('is-show');
 		currentSlide = (n + slide.length) % slide.length;
 		slide[currentSlide].classList.add('is-show');
-
-		console.log(currentSlide);
+		// console.log(currentSlide);
 	}
 
 	next.addEventListener('click', function() {
