@@ -1,1 +1,11 @@
-h1 Photo bla bla
+- var images = ['img/img_1.jpg', 'img/img_2.jpg', 'img/img_3.jpg', 'img/img_4.jpg', 'img/img_5.jpg', 'img/img_6.jpg']
+
+ul.photos-list
+	each img in images
+		li.photo(style='background-image: url()')
+			img(src=img, alt="")
+			div.thumb
+
+
+.overlay
+	h1 Carousel
