@@ -5,9 +5,10 @@
 	let images = document.querySelectorAll('.photo');
 	let overlay = document.querySelector('#overlay');
 	let slideList = document.querySelector('.slides-list');
-	let slide = document.querySelectorAll('.slide');
 	let next = document.querySelector('#next');
 	let previous = document.querySelector('#previous');
+
+	let slide;
 	let currentSlide = 0;
 	let imagesLink = [];
 
@@ -15,8 +16,7 @@
 	images.forEach(function(image, index) {
 		image.addEventListener('click', function(event) {
 			showModal(index);
-			createslide();
-			// console.log(imagesLink);
+			createSlide();
 		});
 	});
 
@@ -24,23 +24,29 @@
 		overlay.classList.toggle('is-show');
 	}
 
-
-	function createslide() {
+	function createSlide() {
 		getImagesLink();
 
 		if (imagesLink.length) {
 			for (let i = 0; i < imagesLink.length; i++) {
 				let li = document.createElement('li');
+				let img = document.createElement('img');
 
 				if (i == 0)
 					li.classList.add('slide', 'is-show');
-						
-				li.classList.add('slide');
+				else		
+					li.classList.add('slide');
+
+				img.setAttribute('src', imagesLink[i]);
+
+				li.appendChild(img);
 				slideList.appendChild(li);
 			}
 		} else {
-			console.log('empty');
+				console.error('List is empy (ノ_<。)');
 		}
+
+		slide = document.querySelectorAll('.slide');
 	}
 
 	function getImagesLink() {
@@ -60,6 +66,7 @@
 		imagesLink = [];
 
 		removeslideChildren();
+		// console.log(evet);
 	});
 
 	function removeslideChildren() {
@@ -83,7 +90,7 @@
 		currentSlide = (n + slide.length) % slide.length;
 		slide[currentSlide].classList.add('is-show');
 
-		// console.log(currentSlide);
+		console.log(currentSlide);
 	}
 
 	next.addEventListener('click', function() {
