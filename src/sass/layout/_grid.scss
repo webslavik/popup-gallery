@@ -5,27 +5,7 @@
 */
 
 
-// примеры Breakpoint
-$extraWide: 1920px;
-$wide: 1280px 1919px;
-$desktop: 960px 1279px;
-$tablet: 600px 959px;
-$mobile: max-width 599px;
-
-$landscape: (max-height 600px) (orientation portrait);
-$hidpi: min-resolution 1.5dppx;
-
-
-//-----------------------------------------------------------
-
 .page-wrap {
-	height: 100%;
 	display: flex;
 	justify-content: center;
-	background-color: #FCFCFC;
-}
-
-
-.container {
-	position: relative;
 }
