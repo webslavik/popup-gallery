@@ -667,7 +667,7 @@ p {
   max-width: 580px;
   width: 100%;
   position: relative;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .controls {
@@ -738,11 +738,27 @@ p {
   background-position: center;
 }
 
+.thumbnails-wrap {
+  padding: 20px;
+  width: 1018px;
+  overflow: hidden;
+}
+
 .thumbnails-track {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  -webkit-transition: -webkit-transform 300ms ease-out;
+  transition: -webkit-transform 300ms ease-out;
+  -o-transition: transform 300ms ease-out;
+  transition: transform 300ms ease-out;
+  transition: transform 300ms ease-out, -webkit-transform 300ms ease-out;
+  -webkit-transform: translateX(0px);
+  -ms-transform: translateX(0px);
+  transform: translateX(0px);
 }
 
 .thumbnail {

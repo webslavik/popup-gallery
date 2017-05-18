@@ -69,7 +69,7 @@
 	max-width: 580px;
 	width: 100%;
 	position: relative;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .controls {
@@ -141,12 +141,18 @@
 
 
 .thumbnails-wrap {
-  // background-color: tomato;
+  padding: 20px;
+  width: 1018px;
+  overflow: hidden;
 }
 
 .thumbnails-track {
   display: flex;
-
+  // padding: 50px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  transition: transform 300ms ease-out;
+  transform: translateX(-0px);
 }
 
 .thumbnail {

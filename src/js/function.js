@@ -11,18 +11,20 @@
 	let thumbnail = document.querySelectorAll('.thumbnail');
 
 	let slide;
+	let thumbnailsLength;
 	let currentSlide = 0;
 	let imagesLink = [];
+	let count = 0;
+	let move = 190;
 
 
-	images.forEach(function(image, index) {
-		image.addEventListener('click', function(event) {
+	images.forEach(function(el, index) {
+		el.addEventListener('click', function(event) {
 			currentSlide = index;
 			showModal();
 			getImagesLink();
 			createSlides();
 			createThumbnails();
-
 		});
 	});
 
@@ -115,27 +117,52 @@
 	
 	function nextPhoto() {
 		goToPhoto(currentSlide + 1);
+		thumbnailsTrackMove('next');
 	}
 
 	function previousPhoto() {
 		goToPhoto(currentSlide - 1);
+		thumbnailsTrackMove('prev');
 	}
 
-	function goToPhoto(num) {
-		slide[currentSlide].classList.remove('is-show');
-		thumbnail[currentSlide].classList.remove('is-active');
-		currentSlide = (num + slide.length) % slide.length;
-		slide[currentSlide].classList.add('is-show');
-		thumbnail[currentSlide].classList.add('is-active');
-	}
 
 	function thumbnailClick() {
+		thumbnailsLength = thumbnail.length;
 		thumbnail.forEach(function(el, index) {
 			el.addEventListener('click', function() {
 				goToPhoto(index);
 			});
 		})
-		
+	}
+
+	function goToPhoto(index) {
+		slide[currentSlide].classList.remove('is-show');
+		thumbnail[currentSlide].classList.remove('is-active');
+		currentSlide = (index + slide.length) % slide.length;
+		slide[currentSlide].classList.add('is-show');
+		thumbnail[currentSlide].classList.add('is-active');
+	}
+
+	function thumbnailsTrackMove(direction) {
+
+		if (direction == 'next') {
+			count = (count + 1) % thumbnailsLength;
+			thumbnailsTrack.style.transform = 'translateX(-' + (count * move) + 'px)'; 
+
+			// if (count > 3) {
+			// 	createThumbnails();
+			// }
+
+		} else {
+			count = (count - 1) % thumbnailsLength;
+			if ( count == -1 )
+				count = 0;
+			// if (count < 3) {
+			// 	createThumbnails();
+			// }
+			thumbnailsTrack.style.transform = 'translateX(+' + (count * move) + 'px)'; 
+			console.log(count * move);
+		}
 	}
 
 })();
