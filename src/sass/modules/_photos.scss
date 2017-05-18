@@ -57,6 +57,7 @@
 
 .overlay {
 	display: flex;
+  flex-direction: column;
 	justify-content: center;
 	align-items: center;
   position: absolute;
@@ -79,6 +80,7 @@
 	max-width: 580px;
 	width: 100%;
 	position: relative;
+  margin-bottom: 40px;
 }
 
 .controls {
@@ -147,3 +149,48 @@
   background-position: center;
 }
 
+
+
+.thumbnails-wrap {
+  // background-color: tomato;
+}
+
+.thumbnails-track {
+  display: flex;
+
+}
+
+.thumbnails {
+  display: inline-block;
+  width: 170px;
+  height: 190px;
+  margin-right: 32px;
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-bottom: 0;
+  background-color: $white;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  transition: all 200ms ease-out;
+  cursor: pointer;
+  transform: translateY(0);
+
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    // .thumb {
+    //   opacity: 1;
+    // }
+  }
+}
+
+.thumbnails-photo {
+  width: 150px;
+  height: 150px;
+  border: 1px solid rgba($black, .1);
+
+  background-color: rgba($black, 0.4);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
