@@ -17,9 +17,11 @@
     "gulp-autoprefixer": "^4.0.0",
     "gulp-clean-css": "^3.3.1",
     "gulp-group-css-media-queries": "^1.2.0",
+    "gulp-if": "^2.0.2",
     "gulp-notify": "^3.0.0",
     "gulp-pug": "^3.3.0",
     "gulp-sass": "^3.1.0",
-    "gulp-uglify": "^2.1.2"
+    "gulp-uglify": "^2.1.2",
+    "gulp-useref": "^3.1.2"
   }
 }
