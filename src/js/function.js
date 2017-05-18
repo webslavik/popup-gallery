@@ -7,6 +7,8 @@
 	let slideList = document.querySelector('.slides-list');
 	let next = document.querySelector('#next');
 	let previous = document.querySelector('#previous');
+	let thumbnailsTrack = document.querySelector('.thumbnails-track');
+	let thumbnail = document.querySelectorAll('.thumbnail');
 
 	let slide;
 	let currentSlide = 0;
@@ -17,7 +19,10 @@
 		image.addEventListener('click', function(event) {
 			currentSlide = index;
 			showModal();
-			createSlide();
+			getImagesLink();
+			createSlides();
+			createThumbnails();
+
 		});
 	});
 
@@ -25,9 +30,8 @@
 		overlay.classList.add('is-show');
 	}
 
-	function createSlide() {
-		getImagesLink();
 
+	function createSlides() {
 		for (let i = 0; i < imagesLink.length; i++) {
 			let li = document.createElement('li');
 			let div = document.createElement('div');
@@ -47,6 +51,28 @@
 		slide = document.querySelectorAll('.slide');
 	}
 
+	function createThumbnails() {
+		for (let i = 0; i < imagesLink.length; i++) {
+			let li = document.createElement('li');
+			let div = document.createElement('div');
+
+			if (i == currentSlide)
+				li.classList.add('thumbnail', 'is-active');
+			else		
+				li.classList.add('thumbnail');
+
+			div.classList.add('thumbnail-photo');
+			div.style.backgroundImage = imagesLink[i];
+
+			li.appendChild(div);
+			thumbnailsTrack.appendChild(li);
+		}
+
+		thumbnail = document.querySelectorAll('.thumbnail');
+		// console.log(thumbnail);
+		thumbnailClick();
+	}
+
 	function getImagesLink() {
 		images.forEach(function(el) {
 			let children = el.childNodes;
@@ -55,8 +81,6 @@
 					imagesLink.push(children[i].style.backgroundImage);
 			}
 		});
-
-		// console.log(imagesLink);
 	}
 
 
@@ -66,40 +90,52 @@
 
 		this.classList.remove('is-show');
 		imagesLink = [];
-		removeslideChildren();
+		removeSlideChildren(slideList);
+		removeSlideChildren(thumbnailsTrack);
 	});
 
-	function removeslideChildren() {
-		while (slideList.firstChild)
-			slideList.removeChild(slideList.firstChild);
+	function removeSlideChildren(element) {
+		while (element.firstChild)
+			element.removeChild(element.firstChild);
 	}
 
 
-
-	// Navigation
-	function nextSlide() {
-		goToSlide(currentSlide + 1);
-	}
-
-	function previousSlide() {
-		goToSlide(currentSlide - 1);
-	}
-
-	function goToSlide(n) {
-		slide[currentSlide].classList.remove('is-show');
-		currentSlide = (n + slide.length) % slide.length;
-		slide[currentSlide].classList.add('is-show');
-		// console.log(currentSlide);
-	}
-
+	/*
+		------------------------------------------------
+			Navigation
+		------------------------------------------------
+	*/ 
 	next.addEventListener('click', function() {
-		nextSlide();
+		nextPhoto();
 	});
 
 	previous.addEventListener('click', function() {
-		previousSlide();
+		previousPhoto();
 	});
+	
+	function nextPhoto() {
+		goToPhoto(currentSlide + 1);
+	}
 
+	function previousPhoto() {
+		goToPhoto(currentSlide - 1);
+	}
 
+	function goToPhoto(num) {
+		slide[currentSlide].classList.remove('is-show');
+		thumbnail[currentSlide].classList.remove('is-active');
+		currentSlide = (num + slide.length) % slide.length;
+		slide[currentSlide].classList.add('is-show');
+		thumbnail[currentSlide].classList.add('is-active');
+	}
+
+	function thumbnailClick() {
+		thumbnail.forEach(function(el, index) {
+			el.addEventListener('click', function() {
+				goToPhoto(index);
+			});
+		})
+		
+	}
 
 })();

@@ -43,17 +43,6 @@
   background-position: center;
 }
 
-.thumb {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba($black, .5);
-  opacity: 0;
-  transition: all 200ms ease-out;
-}
-
 
 .overlay {
 	display: flex;
@@ -160,7 +149,7 @@
 
 }
 
-.thumbnails {
+.thumbnail {
   display: inline-block;
   width: 170px;
   height: 190px;
@@ -175,16 +164,18 @@
   cursor: pointer;
   transform: translateY(0);
 
-  &:hover {
-    transform: translateY(-10px);
+  // &:hover {
+  //   // transform: translateY(-10px);
+  //   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  // }
+
+  &.is-active {
+    transform: translateY(-15px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-    // .thumb {
-    //   opacity: 1;
-    // }
   }
 }
 
-.thumbnails-photo {
+.thumbnail-photo {
   width: 150px;
   height: 150px;
   border: 1px solid rgba($black, .1);
