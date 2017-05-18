@@ -505,7 +505,6 @@ body {
   color: #000;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
-  overflow-x: hidden;
 }
 
 img {
@@ -672,6 +671,12 @@ p {
   pointer-events: auto;
 }
 
+.overlay-content {
+  max-width: 580px;
+  width: 100%;
+  position: relative;
+}
+
 .controls {
   position: absolute;
   top: -webkit-calc(50% - 10px);
@@ -705,13 +710,11 @@ p {
 
 .slide {
   display: none;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
   width: 580px;
   height: 620px;
+  padding-left: 40px;
   padding-top: 40px;
+  padding-right: 40px;
   opacity: 0;
   background-color: #ffffff;
   -webkit-transition: opacity 500ms;
@@ -722,14 +725,16 @@ p {
 }
 
 .slide.is-show {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
+  display: block;
   opacity: 1;
 }
 
+.slide.is-show .slide-image {
+  display: block;
+}
+
 .slide-image {
+  display: none;
   width: 500px;
   height: 500px;
   border: 1px solid rgba(34, 34, 34, 0.1);
