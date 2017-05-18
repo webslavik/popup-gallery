@@ -635,7 +635,7 @@ p {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -658,7 +658,7 @@ p {
 }
 
 .overlay-content {
-  max-width: 580px;
+  max-width: 500px;
   width: 100%;
   position: relative;
   margin-bottom: 20px;
@@ -697,8 +697,9 @@ p {
 
 .slide {
   display: none;
-  width: 580px;
-  height: 620px;
+  max-width: 500px;
+  width: 100%;
+  height: 540px;
   padding-left: 40px;
   padding-top: 40px;
   padding-right: 40px;
@@ -722,8 +723,8 @@ p {
 
 .slide-image {
   display: none;
-  width: 500px;
-  height: 500px;
+  width: 420px;
+  height: 420px;
   border: 1px solid rgba(34, 34, 34, 0.1);
   background-color: rgba(34, 34, 34, 0.4);
   background-repeat: no-repeat;
@@ -757,8 +758,8 @@ p {
 
 .thumbnail {
   display: inline-block;
-  width: 170px;
-  height: 190px;
+  width: 140px;
+  height: 155px;
   margin-right: 32px;
   padding-top: 10px;
   padding-right: 10px;
@@ -785,8 +786,8 @@ p {
 }
 
 .thumbnail-photo {
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   border: 1px solid rgba(34, 34, 34, 0.1);
   background-color: rgba(34, 34, 34, 0.4);
   background-repeat: no-repeat;
