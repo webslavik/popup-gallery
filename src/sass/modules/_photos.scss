@@ -178,7 +178,8 @@
 //-----------------------------------------------------------
 .thumbnails-wrap {
   padding: 20px;
-  width: 1018px;
+  max-width: 868px;
+  width: 100%;
   overflow: hidden;
 }
 

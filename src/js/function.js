@@ -144,24 +144,14 @@
 	}
 
 	function thumbnailsTrackMove(direction) {
-
 		if (direction == 'next') {
+			thumbnailsTrack.style.transform = 'translateX(-' + (count * move) + 'px)';
 			count = (count + 1) % thumbnailsLength;
-			thumbnailsTrack.style.transform = 'translateX(-' + (count * move) + 'px)'; 
-
-			// if (count > 3) {
-			// 	createThumbnails();
-			// }
-
 		} else {
 			count = (count - 1) % thumbnailsLength;
 			if ( count == -1 )
-				count = 0;
-			// if (count < 3) {
-			// 	createThumbnails();
-			// }
-			thumbnailsTrack.style.transform = 'translateX(+' + (count * move) + 'px)'; 
-			console.log(count * move);
+				count = thumbnailsLength - 1;
+			// thumbnailsTrack.style.transform = 'translateX(' + (count * move) + 'px)'
 		}
 	}
 
