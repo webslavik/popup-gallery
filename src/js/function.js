@@ -30,16 +30,17 @@
 
 		for (let i = 0; i < imagesLink.length; i++) {
 			let li = document.createElement('li');
-			let img = document.createElement('img');
+			let div = document.createElement('div');
 
 			if (i == currentSlide)
 				li.classList.add('slide', 'is-show');
 			else		
 				li.classList.add('slide');
 
-			img.setAttribute('src', imagesLink[i]);
+			div.classList.add('slide-image');
+			div.style.backgroundImage = imagesLink[i];
 
-			li.appendChild(img);
+			li.appendChild(div);
 			slideList.appendChild(li);
 		}
 
@@ -50,10 +51,12 @@
 		images.forEach(function(el) {
 			let children = el.childNodes;
 			for (let i = 0; i < children.length; i++) {
-				if (children[i].tagName == 'IMG')
-					imagesLink.push(children[i].getAttribute('src'));
+				if (children[i].tagName == 'DIV')
+					imagesLink.push(children[i].style.backgroundImage);
 			}
 		});
+
+		// console.log(imagesLink);
 	}
 
 

@@ -1,16 +1,18 @@
-- var images = ['img/img_1.jpg', 'img/img_2.jpg', 'img/img_3.jpg', 'img/img_4.jpg', 'img/img_5.jpg', 'img/img_6.jpg']
+- var images = ['img/img_1.jpg', 'img/img_2.jpg', 'img/img_3.jpg', 'img/img_4.jpg', 'img/img_5.jpg', 'img/img_6.jpg', 'img/img_7.jpg', 'img/img_8.jpg',]
 
 ul.photos-list
 	each img in images
-		li.photo(style='background-image: url()')
-			img(src=img, alt="")
-			div.thumb
+		li.photo
+			div.photo-wrap(style='background-image: url(' + img + ')')
+			//- img(src=img, alt="")
+			//- div.thumb
 
 
 #overlay.overlay
 	.overlay-content
 		ul.slides-list
-			//- li.slide.is-show Slide 1
+			//- li.slide.is-show
+			//- 	.slide-image
 			//- li.slide Slide 2
 			//- li.slide Slide 3
 			//- li.slide Slide 4

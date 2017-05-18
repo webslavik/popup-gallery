@@ -1,28 +1,46 @@
 .photos-list {
+  max-width: 1480px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  max-width: 880px;
+  // justify-content: center;
   padding-top: 40px;
-  li:nth-child(2n) {
+  li:nth-child(4n) {
     margin-right: 0;
   }
 }
 
 .photo {
-  max-width: 420px;
-  width: 100%;
-  height: 280px;
+  display: flex;
+  justify-content: center;
+  width: 340px;
+  height: 380px;
   margin-right: 40px;
   margin-bottom: 40px;
+  padding-top: 20px;
   cursor: pointer;
   position: relative;
   user-select: none;
+  transition: all 200ms ease-out;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+
   &:hover {
-    .thumb {
-      opacity: 1;
-    }
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    // .thumb {
+    //   opacity: 1;
+    // }
   }
+}
+
+.photo-wrap {
+  max-width: 300px;
+  width: 100%;
+  height: 300px;
+  border: 1px solid rgba($black, .1);
+  
+  background-color: rgba($black, 0.4);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .thumb {
@@ -58,9 +76,9 @@
 }
 
 .overlay-content {
-	max-width: 720px;
-	width: 100%;
-	position: relative;
+	// max-width: 720px;
+	// width: 100%;
+	// position: relative;
 }
 
 .controls {
@@ -89,36 +107,36 @@
 
 
 .slides-list {
-	width: 100%;
-  height: 480px;
   position: relative;
   background-color: $black;
 }
 
 .slide {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 100%;
+  display: none;
+  justify-content: center;
+  width: 580px;
+  height: 620px;
+  padding-top: 40px;
   opacity: 0;
-  // padding: 16px;
-  background-color: $black;
+  background-color: $white;
   transition: opacity 500ms;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 
-  img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: 0;
-    width: 100%;
-    height: 100%;
-  }
 
   &.is-show {
+    display: flex;
     opacity: 1;
   }
 }
 
+.slide-image {
+  width: 500px;
+  height: 500px;
+  border: 1px solid rgba($black, .1);
+
+  background-color: rgba($black, 0.4);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
 
