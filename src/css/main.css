@@ -684,6 +684,7 @@ p {
   width: 100%;
   height: 480px;
   position: relative;
+  background-color: #222222;
 }
 
 .slide {

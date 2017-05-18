@@ -3,30 +3,73 @@
 (function() {
 
 	let images = document.querySelectorAll('.photo');
-	let overlay = document.querySelector('.overlay');
-	let slides = document.querySelectorAll('.slide');
+	let overlay = document.querySelector('#overlay');
+	let slideList = document.querySelector('.slides-list');
+	let slide = document.querySelectorAll('.slide');
 	let next = document.querySelector('#next');
 	let previous = document.querySelector('#previous');
-	let controls = document.querySelectorAll('.controls');
 	let currentSlide = 0;
+	let imagesLink = [];
 
 
 	images.forEach(function(image, index) {
 		image.addEventListener('click', function(event) {
 			showModal(index);
+			createslide();
+			// console.log(imagesLink);
 		});
 	});
 
 	function showModal(index) {
 		overlay.classList.toggle('is-show');
-		overlay.stopPropagation();
 	}
 
-	// overlay.addEventListener('click', function() {
-	// 	this.classList.toggle('is-show');
-	// });
+
+	function createslide() {
+		getImagesLink();
+
+		if (imagesLink.length) {
+			for (let i = 0; i < imagesLink.length; i++) {
+				let li = document.createElement('li');
+
+				if (i == 0)
+					li.classList.add('slide', 'is-show');
+						
+				li.classList.add('slide');
+				slideList.appendChild(li);
+			}
+		} else {
+			console.log('empty');
+		}
+	}
+
+	function getImagesLink() {
+		images.forEach(function(el) {
+			let children = el.childNodes;
+			for (let i = 0; i < children.length; i++) {
+				if (children[i].tagName == 'IMG')
+					imagesLink.push(children[i].getAttribute('src'));
+			}
+		});
+	}
 
 
+	overlay.addEventListener('click', function(evet) {
+		// let children = overlay.querySelectorAll('*');
+		this.classList.toggle('is-show');
+		imagesLink = [];
+
+		removeslideChildren();
+	});
+
+	function removeslideChildren() {
+		while (slideList.firstChild)
+			slideList.removeChild(slideList.firstChild);
+	}
+
+
+
+	// Navigation
 	function nextSlide() {
 		goToSlide(currentSlide + 1);
 	}
@@ -36,11 +79,11 @@
 	}
 
 	function goToSlide(n) {
-		slides[currentSlide].classList.remove('is-show');
-		currentSlide = (n + slides.length) % slides.length;
-		slides[currentSlide].classList.add('is-show');
+		slide[currentSlide].classList.remove('is-show');
+		currentSlide = (n + slide.length) % slide.length;
+		slide[currentSlide].classList.add('is-show');
 
-		console.log(currentSlide);
+		// console.log(currentSlide);
 	}
 
 	next.addEventListener('click', function() {
