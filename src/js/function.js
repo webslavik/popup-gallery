@@ -15,7 +15,7 @@
 	let currentSlide = 0;
 	let imagesLink = [];
 	let count = 0;
-	let move = 190;
+	let move = 172;
 
 
 	images.forEach(function(el, index) {
@@ -144,15 +144,41 @@
 	}
 
 	function thumbnailsTrackMove(direction) {
+		
 		if (direction == 'next') {
-			thumbnailsTrack.style.transform = 'translateX(-' + (count * move) + 'px)';
 			count = (count + 1) % thumbnailsLength;
-		} else {
+			let moveDistance = count * move;
+			console.log(count);
+			if (moveDistance >= 516) {
+				thumbnailsTrack.style.transform = 'translateX(-' + 516 + 'px)';
+			} else if (count === (thumbnail.length - 1))  {
+				thumbnailsTrack.style.transform = 'translateX(' + 0 + 'px)';
+			} else {
+				thumbnailsTrack.style.transform = 'translateX(-' + (count * move) + 'px)';
+			}
+		} 
+
+		if (direction == 'prev') {
 			count = (count - 1) % thumbnailsLength;
-			if ( count == -1 )
+			let moveDistance = count * move;
+
+			if (count === -1) {
 				count = thumbnailsLength - 1;
-			// thumbnailsTrack.style.transform = 'translateX(' + (count * move) + 'px)'
+				thumbnailsTrack.style.transform = 'translateX(-' + 516 + 'px)';
+			} else {
+				thumbnailsTrack.style.transform = 'translateX(-' + count * (move / 2) + 'px)';
+			}
 		}
+
+		// if (direction == 'next') {
+		// 	thumbnailsTrack.style.transform = 'translateX(-' + (count * move) + 'px)';
+		// 	count = (count + 1) % thumbnailsLength;
+		// } else {
+		// 	count = (count - 1) % thumbnailsLength;
+		// 	if ( count == -1 )
+		// 		count = thumbnailsLength - 1;
+		// 	// thumbnailsTrack.style.transform = 'translateX(' + (count * move) + 'px)'
+		// }
 	}
 
 })();
