@@ -842,22 +842,22 @@ p {
 }
 
 .skySlider-slider {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   position: relative;
-  background-color: #222222;
 }
 
 .skySlider-slide {
-  display: block;
+  display: none;
   max-width: 500px;
+  width: 100%;
 }
 
-.skySlider-slide.is-show {
+.skySlider-slide.is-current {
   display: block;
   opacity: 1;
-}
-
-.skySlider-slide.is-show .slide-image {
-  display: block;
 }
 
 @media (max-width: 1600px) {

@@ -36,18 +36,19 @@
 }
 
 .skySlider-slider {
+    display: flex;
   position: relative;
-  background-color: $black;
+//   background-color: $black;
 //   width: 100%;
 //   height: 80%;
 }
 
 .skySlider-slide {
-    display: block;
+    display: none;
     max-width: 500px;
+    width: 100%;
     // height: 100%;
-    // width: 100%;
-//   height: 540px;
+    // height: 540px;
 //   padding-left: 40px;
 //   padding-top: 40px;
 //   padding-right: 40px;
@@ -57,12 +58,8 @@
 
   
 
-  &.is-show {
+  &.is-current {
     display: block;
     opacity: 1;
-
-    .slide-image {
-      display: block;
-    }
   }
 }

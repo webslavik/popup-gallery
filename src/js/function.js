@@ -188,17 +188,21 @@
 (function() {
 
 	function SkySlider() {
+		this.images = document.querySelectorAll('.skySlider img');
 		this.content = null;
 		this.overlay = null;
 		this.ul = null;
 		this.li = null;
 		this.img = null;
+		this.currentImage = null;
 	}
 
-	SkySlider.prototype.open = function() {
+	SkySlider.prototype.open = function(index) {
 		this.create();
 		this.overlay.addEventListener('click', this.close.bind(this));
 		this.overlay.classList.add('is-open');
+
+		console.log(this.currentImage);
 	}
 
 	SkySlider.prototype.close = function() {
@@ -222,7 +226,10 @@
 
 		for (let i = 0; i < images.length; i++) {
 			this.li = document.createElement('li');
-			this.li.classList.add('skySlider-slide');
+			this.li.classList.add('skySlider-slide')
+			if (this.currentImage === i) {
+				this.li.classList.add('is-current');
+			}
 			this.img = document.createElement('img');
 			this.img.setAttribute('src', images[i].getAttribute('src'));
 			this.li.appendChild(this.img);
@@ -239,11 +246,12 @@
 	let modal = new SkySlider();
 	let images = document.querySelectorAll('.photo');
 
-	for (let i = 0; i < images.length; i++) {
-		images[i].addEventListener('click', function() {
+	images.forEach(function(el, index) {
+		el.addEventListener('click', function(event) {
+			modal.currentImage = index;
 			modal.open();
 		});
-	}
+	});
 
 })()
 
