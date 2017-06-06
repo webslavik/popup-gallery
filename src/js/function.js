@@ -188,8 +188,11 @@
 (function() {
 
 	function SkySlider() {
-		this.modal = null;
+		this.content = null;
 		this.overlay = null;
+		this.ul = null;
+		this.li = null;
+		this.img = null;
 	}
 
 	SkySlider.prototype.open = function() {
@@ -204,14 +207,29 @@
 
 	SkySlider.prototype.create = function() {
 		let docFrag = document.createDocumentFragment();
+		let images = document.querySelectorAll('.skySlider img');
 		
 		this.overlay = document.createElement('div');
 		this.overlay.classList.add('skySlider-overlay');
 		docFrag.appendChild(this.overlay);
 		
-		this.modal = document.createElement('div');
-		this.modal.classList.add('skySlider-modal');
-		this.overlay.appendChild(this.modal);
+		this.content = document.createElement('div');
+		this.content.classList.add('skySlider-content');
+		this.overlay.appendChild(this.content);
+
+		this.ul = document.createElement('ul');
+		this.ul.classList.add('skySlider-slider');
+
+		for (let i = 0; i < images.length; i++) {
+			this.li = document.createElement('li');
+			this.li.classList.add('skySlider-slide');
+			this.img = document.createElement('img');
+			this.img.setAttribute('src', images[i].getAttribute('src'));
+			this.li.appendChild(this.img);
+			this.ul.appendChild(this.li)
+		}
+
+		this.content.appendChild(this.ul);
 
 		document.body.appendChild(docFrag);
 	}
