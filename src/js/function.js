@@ -308,7 +308,7 @@
 			el.addEventListener('click', () => {
 				let siblings = el.parentNode.children;
 
-				for (let i = 0; i < siblings.length - 1; i++) 
+				for (let i = 0; i < siblings.length; i++) 
 					if (siblings[i].classList.contains('is-current'))
 						siblings[i].classList.remove('is-current');
 
@@ -319,8 +319,7 @@
 			});
 		});
 	}
-
-
+	
 	SkySlider.prototype.actions = function(index) {
 		this.prev.addEventListener('click', () => {
 			this.index--;
@@ -329,6 +328,7 @@
 				this.index = this.total - 1;
 			}
 
+			this.thumbnailActive();
 			this.slideTo(this.index);
 		});
 
@@ -339,7 +339,21 @@
 				this.index = 0;
 			}
 
+			this.thumbnailActive();
 			this.slideTo(this.index);
+		});
+	}
+
+	SkySlider.prototype.thumbnailActive = function() {
+		let thumbnails = this.thumbnailsList.children;
+		Array.from(thumbnails, (el, index) => {
+			let siblings = el.parentNode.children;
+
+			for (let i = 0; i < siblings.length; i++) 
+				if (siblings[i].classList.contains('is-current'))
+					siblings[i].classList.remove('is-current');
+			
+				siblings[this.index].classList.add('is-current');
 		});
 	}
 
