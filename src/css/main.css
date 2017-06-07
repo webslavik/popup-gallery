@@ -895,6 +895,11 @@ p {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  position: relative;
+  left: 0;
+  -webkit-transition: 0.5s left;
+  -o-transition: 0.5s left;
+  transition: 0.5s left;
 }
 
 .skySlider-thumbnail {
