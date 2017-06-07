@@ -819,25 +819,40 @@ p {
   opacity: 1;
 }
 
-.skySlider-content {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
+.skySlider-slider-wrap {
   position: absolute;
-  top: 50%;
+  top: 15%;
   left: 50%;
-  z-index: 9999;
   -webkit-transition: 1ms opacity ease;
   -o-transition: 1ms opacity ease;
   transition: 1ms opacity ease;
   -webkit-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+.skySlider-arrow {
+  padding: 8px 16px;
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+}
+
+.skySlider-arrow.next {
+  right: -80px;
+}
+
+.skySlider-arrow.prev {
+  left: -80px;
 }
 
 .skySlider-slider {
@@ -845,17 +860,22 @@ p {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  width: 500px;
   position: relative;
 }
 
 .skySlider-slide {
-  display: none;
-  max-width: 500px;
   width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  -webkit-transition: opacity 500ms ease-out;
+  -o-transition: opacity 500ms ease-out;
+  transition: opacity 500ms ease-out;
 }
 
 .skySlider-slide.is-current {
-  display: block;
   opacity: 1;
 }
 

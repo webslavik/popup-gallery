@@ -195,27 +195,31 @@
 		this.el = document.querySelector(element);
 		this.images = this.el.querySelectorAll('img');
 
+		this.next = null;
+		this.prev = null;
+
 		this.overlay = null;
-		this.content = null;
+		this.sliderWrap = null;
 		this.ul = null;
 		this.li = null;
 		this.img = null;
-		this.currentImage = null;
+		this.index = 0;
+		this.total = 0;
 	};
 
 	SkySlider.prototype.open = function(index) {
-		this.currentImage = index;
+
+		this.index = index;
 		this.create();
+		this.actions(this.index);
 		this.overlay.classList.add('is-open');
 
-		// this.overlay.addEventListener('click', this.close.bind(this));
-		this.overlay.addEventListener('click', function(e) {
+		this.overlay.addEventListener('click', (e) => {
 			let target = e.target;
 			if (!target.classList.contains('skySlider-overlay')) {
 				return false;
 			}
-
-			target.parentNode.removeChild(target);
+			this.close();
 		});
 	}
 
@@ -230,17 +234,32 @@
 		this.overlay.classList.add('skySlider-overlay');
 		docFrag.appendChild(this.overlay);
 		
-		this.content = document.createElement('div');
-		this.content.classList.add('skySlider-content');
-		this.overlay.appendChild(this.content);
+		this.sliderWrap = document.createElement('div');
+		this.sliderWrap.classList.add('skySlider-slider-wrap');
+		this.overlay.appendChild(this.sliderWrap);
 
+		// create Slider navigations
+		//--------------------------------------------------------
+		this.next = document.createElement('div');
+		this.next.classList.add('skySlider-arrow', 'next');
+		this.next.innerHTML = 'next';
+
+		this.prev = document.createElement('div');
+		this.prev.classList.add('skySlider-arrow', 'prev');
+		this.prev.innerHTML = 'prev';
+
+		this.sliderWrap.appendChild(this.next);
+		this.sliderWrap.appendChild(this.prev);
+
+		// create Images list
+		//--------------------------------------------------------
 		this.ul = document.createElement('ul');
 		this.ul.classList.add('skySlider-slider');
 
 		for (let i = 0; i < this.images.length; i++) {
 			this.li = document.createElement('li');
 			this.li.classList.add('skySlider-slide')
-			if (this.currentImage === i) {
+			if (this.index === i) {
 				this.li.classList.add('is-current');
 			}
 			this.img = document.createElement('img');
@@ -248,14 +267,52 @@
 			this.li.appendChild(this.img);
 			this.ul.appendChild(this.li)
 		}
+		this.total = this.ul.children.length;
 
-		this.content.appendChild(this.ul);
+		this.sliderWrap.appendChild(this.ul);
 
 		document.body.appendChild(docFrag);
 	}
 
+	SkySlider.prototype.actions = function(index) {
+
+		this.prev.addEventListener('click', () => {
+			this.index--;
+
+			if (this.index < 0) {
+				this.index = this.total - 1;
+			}
+
+			this.slideTo(this.index);
+		});
+
+		this.next.addEventListener('click', () => {
+			this.index++;
+
+			if (this.index == this.total) {
+				this.index = 0;
+			}
+
+			this.slideTo(this.index);
+		});
+	}
+
+	SkySlider.prototype.slideTo = function(index) {
+		let slide = this.ul.children;
+
+		Array.from(slide, (elem, indexEl) => {
+			if (elem.classList.contains('is-current')) {
+				elem.classList.remove('is-current');
+			}
+			if (indexEl == index) {
+				elem.classList.add('is-current');
+			}
+		});
+	}
 
 
+
+	//-------------------------------------------------
 	let modal = new SkySlider('.skySlider');
 	let images = document.querySelectorAll('.photo');
 

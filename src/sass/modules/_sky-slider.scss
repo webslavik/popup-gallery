@@ -1,8 +1,6 @@
 .skySlider {
-
     img {
         max-width: 100%;
-        // display: none;
     }
 }
 
@@ -23,43 +21,51 @@
     }
 }
 
-.skySlider-content {
-    display: flex;
-    justify-content: center;
-    // width: 94%;
+
+.skySlider-slider-wrap {
     position: absolute;
-    top: 50%;
+    top: 15%;
     left: 50%;
-    z-index: 9999;
     transition: 1ms opacity ease;
     transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+.skySlider-arrow {
+    padding: 8px 16px;
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    cursor: pointer;
+    user-select: none;
+
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+    &.next {
+        right: -80px;
+    }
+    &.prev {
+        left: -80px;
+    }
 }
 
 .skySlider-slider {
     display: flex;
-  position: relative;
-//   background-color: $black;
-//   width: 100%;
-//   height: 80%;
+    width: 500px;
+    position: relative;
 }
 
 .skySlider-slide {
-    display: none;
-    max-width: 500px;
     width: 100%;
-    // height: 100%;
-    // height: 540px;
-//   padding-left: 40px;
-//   padding-top: 40px;
-//   padding-right: 40px;
-//   background-color: $white;
-//   transition: opacity 500ms;
-//   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-
-  
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 500ms ease-out;
 
   &.is-current {
-    display: block;
     opacity: 1;
   }
 }
+
