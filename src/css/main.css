@@ -828,7 +828,6 @@ p {
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   justify-content: center;
-  width: 94%;
   position: absolute;
   top: 50%;
   left: 50%;

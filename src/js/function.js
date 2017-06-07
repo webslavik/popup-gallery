@@ -207,8 +207,16 @@
 		this.currentImage = index;
 		this.create();
 		this.overlay.classList.add('is-open');
-		
-		this.overlay.addEventListener('click', this.close.bind(this));
+
+		// this.overlay.addEventListener('click', this.close.bind(this));
+		this.overlay.addEventListener('click', function(e) {
+			let target = e.target;
+			if (!target.classList.contains('skySlider-overlay')) {
+				return false;
+			}
+
+			target.parentNode.removeChild(target);
+		});
 	}
 
 	SkySlider.prototype.close = function() {
