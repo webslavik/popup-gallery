@@ -301,14 +301,10 @@
 		document.body.appendChild(docFrag);
 	}
 
-	// SkySlider.prototype.createThumbnails = function() {
-		
-	// }
-
 	SkySlider.prototype.thumbnailsActions = function() {
 		let thumbnails = this.thumbnailsList.children;
 
-		Array.from(thumbnails, (el, i) => {
+		Array.from(thumbnails, (el, index) => {
 			el.addEventListener('click', () => {
 				let siblings = el.parentNode.children;
 
@@ -317,10 +313,13 @@
 						siblings[i].classList.remove('is-current');
 
 				el.classList.add('is-current');
+
+				this.index = index;
+				this.slideTo(index);
 			});
 		});
-		
 	}
+
 
 	SkySlider.prototype.actions = function(index) {
 		this.prev.addEventListener('click', () => {
