@@ -890,12 +890,11 @@ p {
   overflow: hidden;
 }
 
-.skySlider-thumbnails-list {
+.skySlider-thumbnails-belt {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 1048px;
 }
 
 .skySlider-thumbnail {
