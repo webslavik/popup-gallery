@@ -7,6 +7,20 @@ ul.photos-list.skySlider
 			img(src=img, alt="Some Foto")
 
 
+
+.skySlider-overlay.is-open
+	.skySlider-slider-wrap
+		ul.skySlider-slider
+			each img in images
+				li.skySlider-slide.is-current
+					img(src=img, alt="Some Foto")
+
+	.skySlider-thumbnails-wrap
+		ul.skySlider-thumbnails-list
+			each img in images
+				li.skySlider-thumbnail
+					img(src=img, alt="Some Foto")
+
 //- #overlay.overlay
 //- 	.overlay-content
 //- 		ul.slides-list
