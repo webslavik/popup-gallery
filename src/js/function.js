@@ -187,22 +187,28 @@
 
 (function() {
 
-	function SkySlider() {
-		this.images = document.querySelectorAll('.skySlider img');
-		this.content = null;
+	function SkySlider(element) {
+		this.init(element);
+	}
+
+	SkySlider.prototype.init = function(element) {
+		this.el = document.querySelector(element);
+		this.images = this.el.querySelectorAll('img');
+
 		this.overlay = null;
+		this.content = null;
 		this.ul = null;
 		this.li = null;
 		this.img = null;
 		this.currentImage = null;
-	}
+	};
 
 	SkySlider.prototype.open = function(index) {
+		this.currentImage = index;
 		this.create();
-		this.overlay.addEventListener('click', this.close.bind(this));
 		this.overlay.classList.add('is-open');
-
-		console.log(this.currentImage);
+		
+		this.overlay.addEventListener('click', this.close.bind(this));
 	}
 
 	SkySlider.prototype.close = function() {
@@ -211,7 +217,6 @@
 
 	SkySlider.prototype.create = function() {
 		let docFrag = document.createDocumentFragment();
-		let images = document.querySelectorAll('.skySlider img');
 		
 		this.overlay = document.createElement('div');
 		this.overlay.classList.add('skySlider-overlay');
@@ -224,14 +229,14 @@
 		this.ul = document.createElement('ul');
 		this.ul.classList.add('skySlider-slider');
 
-		for (let i = 0; i < images.length; i++) {
+		for (let i = 0; i < this.images.length; i++) {
 			this.li = document.createElement('li');
 			this.li.classList.add('skySlider-slide')
 			if (this.currentImage === i) {
 				this.li.classList.add('is-current');
 			}
 			this.img = document.createElement('img');
-			this.img.setAttribute('src', images[i].getAttribute('src'));
+			this.img.setAttribute('src', this.images[i].getAttribute('src'));
 			this.li.appendChild(this.img);
 			this.ul.appendChild(this.li)
 		}
@@ -243,13 +248,12 @@
 
 
 
-	let modal = new SkySlider();
+	let modal = new SkySlider('.skySlider');
 	let images = document.querySelectorAll('.photo');
 
 	images.forEach(function(el, index) {
 		el.addEventListener('click', function(event) {
-			modal.currentImage = index;
-			modal.open();
+			modal.open(index);
 		});
 	});
 
