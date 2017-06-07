@@ -876,6 +876,8 @@ p {
 }
 
 .skySlider-thumbnails-wrap {
+  width: 655px;
+  padding: 16px 0;
   position: absolute;
   bottom: 2%;
   left: 50%;
@@ -886,6 +888,7 @@ p {
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
   z-index: 9999;
+  overflow: hidden;
 }
 
 .skySlider-thumbnails-list {
@@ -893,6 +896,7 @@ p {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  width: 1048px;
 }
 
 .skySlider-thumbnail {

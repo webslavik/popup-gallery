@@ -195,14 +195,19 @@
 		this.el = document.querySelector(element);
 		this.images = this.el.querySelectorAll('img');
 
-		this.next = null;
-		this.prev = null;
-
 		this.overlay = null;
 		this.sliderWrap = null;
 		this.ul = null;
 		this.li = null;
 		this.img = null;
+
+		this.next = null;
+		this.prev = null;
+
+		this.thumbnailsWrap = null;
+		this.thumbnailsList = null;
+		this.thumbnail = null;
+
 		this.index = 0;
 		this.total = 0;
 	};
@@ -212,6 +217,7 @@
 		this.index = index;
 		this.create();
 		this.actions(this.index);
+		this.thumbnailsActions();
 		this.overlay.classList.add('is-open');
 
 		this.overlay.addEventListener('click', (e) => {
@@ -271,11 +277,52 @@
 
 		this.sliderWrap.appendChild(this.ul);
 
+		// create Thumbnails
+		//--------------------------------------------------------
+		this.thumbnailsWrap = document.createElement('div');
+		this.thumbnailsWrap.classList.add('skySlider-thumbnails-wrap');
+		this.thumbnailsList = document.createElement('ul');
+		this.thumbnailsList.classList.add('skySlider-thumbnails-list');
+
+		for (let i = 0; i < this.images.length; i++) {
+			this.thumbnail = document.createElement('li');
+			this.thumbnail.classList.add('skySlider-thumbnail')
+			if (this.index === i) {
+				this.thumbnail.classList.add('is-current');
+			}
+			this.img = document.createElement('img');
+			this.img.setAttribute('src', this.images[i].getAttribute('src'));
+			this.thumbnail.appendChild(this.img);
+			this.thumbnailsList.appendChild(this.thumbnail);
+		}
+		this.thumbnailsWrap.appendChild(this.thumbnailsList);
+		this.overlay.appendChild(this.thumbnailsWrap);
+
 		document.body.appendChild(docFrag);
 	}
 
-	SkySlider.prototype.actions = function(index) {
+	// SkySlider.prototype.createThumbnails = function() {
+		
+	// }
 
+	SkySlider.prototype.thumbnailsActions = function() {
+		let thumbnails = this.thumbnailsList.children;
+
+		Array.from(thumbnails, (el, i) => {
+			el.addEventListener('click', () => {
+				let siblings = el.parentNode.children;
+
+				for (let i = 0; i < siblings.length - 1; i++) 
+					if (siblings[i].classList.contains('is-current'))
+						siblings[i].classList.remove('is-current');
+
+				el.classList.add('is-current');
+			});
+		});
+		
+	}
+
+	SkySlider.prototype.actions = function(index) {
 		this.prev.addEventListener('click', () => {
 			this.index--;
 

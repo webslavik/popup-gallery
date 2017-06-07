@@ -69,16 +69,22 @@
 // Thumbnails
 //---------------------------------------
 .skySlider-thumbnails-wrap {
+    width: 655px;
+    padding: 16px 0;
     position: absolute;
     bottom: 2%;
     left: 50%;
     transition: 1ms opacity ease;
     transform: translateX(-50%);
     z-index: 9999;
+
+    // background: tomato;
+    overflow: hidden;
 }
 
 .skySlider-thumbnails-list {
     display: flex;
+    width: 1048px;
 }
 
 .skySlider-thumbnail {
