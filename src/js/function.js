@@ -26,8 +26,6 @@
 		this.index = 0;
 		this.total = 0;
 
-		this.test = 'Jack';
-
 		this.defatulSettings = {
 			thumbnailItems: items || 5,
 		}
@@ -39,6 +37,7 @@
 		this.arrowActions(this.index);
 		this.thumbnailsActions();
 		this.thumbnailWrapperWidth();
+		this.onMouseDownBelt();
 
 		this.overlay.classList.add('is-open');
 
@@ -175,18 +174,15 @@
 		if (direction == 'right') {
 			let moveWidth = 131 * (this.index);
 			this.thumbnailsBelt.style.left = `-${moveWidth}px`;
-
-			console.log(moveWidth);
 		}
 
 		if (direction == 'left') {
 			let moveWidth = 131 * (this.index);
 			this.thumbnailsBelt.style.left = `${moveWidth}px`;
-
-			console.log(moveWidth);
 		}
 
 	}
+
 
 	SkySlider.prototype.arrowActions = function(index) {
 		this.prev.addEventListener('click', () => {
@@ -198,7 +194,7 @@
 
 			this.thumbnailActive();
 			this.slideTo(this.index);
-			this.moveBelt('left');
+			// this.moveBelt('left');
 		});
 
 		this.next.addEventListener('click', () => {
@@ -210,7 +206,7 @@
 
 			this.thumbnailActive();
 			this.slideTo(this.index);
-			this.moveBelt('right');
+			// this.moveBelt('right');
 		});
 	}
 
@@ -227,7 +223,27 @@
 		});
 	}
 
+	SkySlider.prototype.onMouseDownBelt = function() {
+		let sum;
+		let start;
+		let end;
 
+		this.thumbnailsBelt.addEventListener('dragstart', (e) => {
+			start = e.pageX;
+			// console.log('test');
+		});
+
+		this.thumbnailsBelt.addEventListener('dragend', (e) => {
+			end = e.pageX;
+			sum = start - end;
+			this.thumbnailsBelt.style.transform = `translate3d(-${sum}px, 0px, 0px)`;	
+		});
+
+		// this.thumbnailsBelt.addEventListener('mousemove', () => {
+		// 	sum = start - end;
+		// 	this.thumbnailsBelt.style.transform = `translate3d(-${sum}px, 0px, 0px)`;
+		// });
+	}
 
 	//-------------------------------------------------
 	let modal = new SkySlider();
