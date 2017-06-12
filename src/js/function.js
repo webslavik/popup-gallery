@@ -45,7 +45,7 @@
 		this.index = index;
 		this.create();
 		this.moveSlider();
-		// this.actions(this.index);
+		this.sliderArrows();
 		this.thumbnailsActions();
 		this.overlay.classList.add('is-open');
 
@@ -153,29 +153,7 @@
 		});
 	}
 	
-	// SkySlider.prototype.actions = function(index) {
-	// 	this.prev.addEventListener('click', () => {
-	// 		this.index--;
 
-	// 		if (this.index < 0) {
-	// 			this.index = this.total - 1;
-	// 		}
-
-	// 		this.thumbnailActive();
-	// 		this.slideTo(this.index);
-	// 	});
-
-	// 	this.next.addEventListener('click', () => {
-	// 		this.index++;
-
-	// 		if (this.index == this.total) {
-	// 			this.index = 0;
-	// 		}
-
-	// 		this.thumbnailActive();
-	// 		this.slideTo(this.index);
-	// 	});
-	// }
 
 	SkySlider.prototype.thumbnailActive = function() {
 		let thumbnails = this.thumbnailsList.children;
@@ -189,19 +167,6 @@
 				siblings[this.index].classList.add('is-current');
 		});
 	}
-
-	// SkySlider.prototype.slideTo = function(index) {
-	// 	let slide = this.ulBelt.children;
-
-	// 	Array.from(slide, (elem, indexEl) => {
-	// 		if (elem.classList.contains('is-current')) {
-	// 			elem.classList.remove('is-current');
-	// 		}
-	// 		if (indexEl == index) {
-	// 			elem.classList.add('is-current');
-	// 		}
-	// 	});
-	// }
 
 	SkySlider.prototype.moveSlider = function() {
 
@@ -279,6 +244,34 @@
 			}
 		});
 	}
+
+	SkySlider.prototype.sliderArrows = function() {
+		let liLength = this.ulBelt.children.length,
+			liWidth = this.li.offsetWidth;
+
+		this.prev.addEventListener('click', () => {
+			this.index--;
+			this.ulBelt.style.transition = 'all 300ms ease-out';
+
+			if (this.index < 0) {
+				this.index = 0;
+			}
+
+			this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
+		});
+
+		this.next.addEventListener('click', () => {
+			this.index++;
+			this.ulBelt.style.transition = 'all 300ms ease-out';
+
+			if (this.index == liLength) {
+				this.index = liLength-1;
+			}
+
+			this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
+		});
+	}
+
 
 
 	// get translate3d value
