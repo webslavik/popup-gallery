@@ -205,43 +205,78 @@
 
 	SkySlider.prototype.moveSlider = function() {
 
-		
-		let self = this,
-			sliderWidth = self.slider.offsetWidth,
-			liElements = self.ulBelt.children,
+		let sliderWidth = this.slider.offsetWidth,
+			liElements = this.ulBelt.children,
 			liCount = liElements.length,
 			liWidth = liElements[0].offsetWidth,
-			ulBeltLeft,
-			start,
-			dist,
+			ulBeltLeft, // rename?
+			startX,
+			startY,
+			distX,
+			distY,
 			dir,
 			totalDist,
-			currentIndex = self.index,
+			currentIndex = this.index,
 			threshold = 150,
+			restraint = 100,
+			allowedTime = 500,
 			startTime,
 			elepsedTime;
 
 			
-
-		self.ulBelt.style.width = `${liWidth * liCount}px`;
-		self.ulBelt.style.transform = `translate3d(-${currentIndex * liWidth}px,0,0)`;
+		this.ulBelt.style.width = `${liWidth * liCount}px`;
+		this.ulBelt.style.transform = `translate3d(-${currentIndex * liWidth}px,0,0)`;
 
 		// for Mouse
 		//------------------------------------------------------
-		self.slider.addEventListener('mousedown', (e) => {
+		this.slider.addEventListener('mousedown', (e) => {
 			e.preventDefault();
 
-			self.ulBelt.style.transition = 'all 300ms ease-out';
-			ulBeltLeft = parseInt(getTransformValue(self.ulBelt));
-			start = e.pageX;
+			this.ulBelt.style.transition = 'all 300ms ease-out';
+			ulBeltLeft = parseInt(getTransformValue(this.ulBelt));
+			startX = e.pageX;
 			startTime = new Date().getTime();
 		});
 
-		self.slider.addEventListener('mouseup', (e) => {
-			dist = e.pageX - start;
-			dir = (dist < 0) ? 'left' : 'right';
+		this.slider.addEventListener('mouseup', (e) => {
+			distX = e.pageX - startX;
+			dir = (distX < 0) ? 'left' : 'right';
 			currentIndex = (dir == 'left') ? Math.min(currentIndex+1, liCount-1) : Math.max(currentIndex-1,0);
-			self.ulBelt.style.transform = `translate3d(-${currentIndex * liWidth}px,0,0)`;
+			this.ulBelt.style.transform = `translate3d(-${currentIndex * liWidth}px,0,0)`;
+		});
+
+
+		// for Touch
+		//------------------------------------------------------
+		this.slider.addEventListener('touchstart', (e) => {
+			e.preventDefault();
+
+			this.ulBelt.style.transition = 'all 300ms ease-out';
+			ulBeltLeft = parseInt(getTransformValue(this.ulBelt));
+			let touchObj = e.changedTouches[0];
+			startX = touchObj.pageX;
+			startY = touchObj.pageY;
+			startTime = new Date().getTime();
+		});
+
+		this.slider.addEventListener('touchmove', (e) => {
+			e.preventDefault();
+
+			let touchObj = e.changedTouches[0];
+			totalDist = distX + ulBeltLeft;
+			distX = touchObj.pageX - startX;
+			dir = (distX < 0) ? 'left' : 'right';
+		});
+
+		this.slider.addEventListener('touchend', (e) => {
+			e.preventDefault();
+
+			elepsedTime = new Date().getTime() - startTime;
+
+			if (elepsedTime < allowedTime) {
+				currentIndex = (dir == 'left') ? Math.min(currentIndex+1, liCount-1) : Math.max(currentIndex-1, 0);
+				this.ulBelt.style.transform = `translate3d(-${currentIndex * liWidth}px,0,0)`;
+			}
 		});
 	}
 
