@@ -24,7 +24,8 @@
 
 		this.overlay = null;
 		this.sliderWrap = null;
-		this.ul = null;
+		this.slider = null;
+		this.ulBelt = null;
 		this.li = null;
 		this.img = null;
 
@@ -43,7 +44,8 @@
 
 		this.index = index;
 		this.create();
-		this.actions(this.index);
+		this.moveSlider();
+		// this.actions(this.index);
 		this.thumbnailsActions();
 		this.overlay.classList.add('is-open');
 
@@ -86,8 +88,12 @@
 
 		// create Images list
 		//--------------------------------------------------------
-		this.ul = document.createElement('ul');
-		this.ul.classList.add('skySlider-slider');
+		this.slider = document.createElement('div');
+		this.slider.classList.add('skySlider-slider');
+		this.sliderWrap.appendChild(this.slider);
+
+		this.ulBelt = document.createElement('ul');
+		this.ulBelt.classList.add('skySlider-slider-belt');
 
 		for (let i = 0; i < this.images.length; i++) {
 			this.li = document.createElement('li');
@@ -98,11 +104,11 @@
 			this.img = document.createElement('img');
 			this.img.setAttribute('src', this.images[i].getAttribute('src'));
 			this.li.appendChild(this.img);
-			this.ul.appendChild(this.li)
+			this.ulBelt.appendChild(this.li)
 		}
-		this.total = this.ul.children.length;
+		this.total = this.ulBelt.children.length;
 
-		this.sliderWrap.appendChild(this.ul);
+		this.slider.appendChild(this.ulBelt);
 
 		// create Thumbnails
 		//--------------------------------------------------------
@@ -142,34 +148,34 @@
 				el.classList.add('is-current');
 
 				this.index = index;
-				this.slideTo(index);
+				// this.slideTo(index);
 			});
 		});
 	}
 	
-	SkySlider.prototype.actions = function(index) {
-		this.prev.addEventListener('click', () => {
-			this.index--;
+	// SkySlider.prototype.actions = function(index) {
+	// 	this.prev.addEventListener('click', () => {
+	// 		this.index--;
 
-			if (this.index < 0) {
-				this.index = this.total - 1;
-			}
+	// 		if (this.index < 0) {
+	// 			this.index = this.total - 1;
+	// 		}
 
-			this.thumbnailActive();
-			this.slideTo(this.index);
-		});
+	// 		this.thumbnailActive();
+	// 		this.slideTo(this.index);
+	// 	});
 
-		this.next.addEventListener('click', () => {
-			this.index++;
+	// 	this.next.addEventListener('click', () => {
+	// 		this.index++;
 
-			if (this.index == this.total) {
-				this.index = 0;
-			}
+	// 		if (this.index == this.total) {
+	// 			this.index = 0;
+	// 		}
 
-			this.thumbnailActive();
-			this.slideTo(this.index);
-		});
-	}
+	// 		this.thumbnailActive();
+	// 		this.slideTo(this.index);
+	// 	});
+	// }
 
 	SkySlider.prototype.thumbnailActive = function() {
 		let thumbnails = this.thumbnailsList.children;
@@ -184,17 +190,68 @@
 		});
 	}
 
-	SkySlider.prototype.slideTo = function(index) {
-		let slide = this.ul.children;
+	// SkySlider.prototype.slideTo = function(index) {
+	// 	let slide = this.ulBelt.children;
 
-		Array.from(slide, (elem, indexEl) => {
-			if (elem.classList.contains('is-current')) {
-				elem.classList.remove('is-current');
-			}
-			if (indexEl == index) {
-				elem.classList.add('is-current');
-			}
+	// 	Array.from(slide, (elem, indexEl) => {
+	// 		if (elem.classList.contains('is-current')) {
+	// 			elem.classList.remove('is-current');
+	// 		}
+	// 		if (indexEl == index) {
+	// 			elem.classList.add('is-current');
+	// 		}
+	// 	});
+	// }
+
+	SkySlider.prototype.moveSlider = function() {
+
+		
+		let self = this,
+			sliderWidth = self.slider.offsetWidth,
+			liElements = self.ulBelt.children,
+			liCount = liElements.length,
+			liWidth = liElements[0].offsetWidth,
+			ulBeltLeft,
+			start,
+			dist,
+			dir,
+			totalDist,
+			currentIndex = self.index,
+			threshold = 150,
+			startTime,
+			elepsedTime;
+
+			
+
+		self.ulBelt.style.width = `${liWidth * liCount}px`;
+		self.ulBelt.style.transform = `translate3d(-${currentIndex * liWidth}px,0,0)`;
+
+		// for Mouse
+		//------------------------------------------------------
+		self.slider.addEventListener('mousedown', (e) => {
+			e.preventDefault();
+
+			self.ulBelt.style.transition = 'all 300ms ease-out';
+			ulBeltLeft = parseInt(getTransformValue(self.ulBelt));
+			start = e.pageX;
+			startTime = new Date().getTime();
 		});
+
+		self.slider.addEventListener('mouseup', (e) => {
+			dist = e.pageX - start;
+			dir = (dist < 0) ? 'left' : 'right';
+			currentIndex = (dir == 'left') ? Math.min(currentIndex+1, liCount-1) : Math.max(currentIndex-1,0);
+			self.ulBelt.style.transform = `translate3d(-${currentIndex * liWidth}px,0,0)`;
+		});
+	}
+
+
+	// get translate3d value
+	//--------------------------------------------
+	function getTransformValue(el) {
+		let transform = el.style.transform;
+		let xyzArray = transform.replace(/translate3d|px|\(|\)/gi, '').split(',');
+		return xyzArray[0];
 	}
 
 

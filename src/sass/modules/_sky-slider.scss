@@ -16,11 +16,12 @@
 }
 
 
-// Thumbnails
+// Big Images
 //---------------------------------------
 .skySlider-slider-wrap {
+    // width: 500px;
     position: absolute;
-    top: 10%;
+    top: 40%;
     left: 50%;
     transition: 1ms opacity ease;
     transform: translate(-50%, -50%);
@@ -47,22 +48,19 @@
 }
 
 .skySlider-slider {
-    display: flex;
     width: 500px;
-    position: relative;
+    overflow: hidden;
+}
+
+.skySlider-slider-belt {
+    // transition: all 300ms ease-out;
+    cursor: pointer;
+    background-color: #222;
 }
 
 .skySlider-slide {
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    transition: opacity 500ms ease-out;
-
-  &.is-current {
-    opacity: 1;
-  }
+    float: left;
+    width: 500px;
 }
 
 

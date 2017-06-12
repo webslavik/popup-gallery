@@ -817,7 +817,7 @@ p {
 
 .skySlider-slider-wrap {
   position: absolute;
-  top: 10%;
+  top: 40%;
   left: 50%;
   -webkit-transition: 1ms opacity ease;
   -o-transition: 1ms opacity ease;
@@ -852,27 +852,18 @@ p {
 }
 
 .skySlider-slider {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
   width: 500px;
-  position: relative;
+  overflow: hidden;
+}
+
+.skySlider-slider-belt {
+  cursor: pointer;
+  background-color: #222;
 }
 
 .skySlider-slide {
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  -webkit-transition: opacity 500ms ease-out;
-  -o-transition: opacity 500ms ease-out;
-  transition: opacity 500ms ease-out;
-}
-
-.skySlider-slide.is-current {
-  opacity: 1;
+  float: left;
+  width: 500px;
 }
 
 .skySlider-thumbnails-wrap {
