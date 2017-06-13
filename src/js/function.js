@@ -149,7 +149,8 @@
 			liWidth = this.li.offsetWidth;
 
 		Array.from(thumbnails, (el, index) => {
-			el.addEventListener('click', () => {
+
+			addListenerMulti(el, 'click touchend', () => {
 				let siblings = el.parentNode.children;
 
 				for (let i = 0; i < siblings.length; i++) 
@@ -370,6 +371,12 @@
 		return xyzArray[0];
 	}
 
+
+	// set Events
+	//--------------------------------------------
+	function addListenerMulti(el, s, fn) {
+		s.split(' ').forEach(e => el.addEventListener(e, fn, false));
+	}
 
 
 	//-------------------------------------------------
