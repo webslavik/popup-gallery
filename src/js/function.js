@@ -175,22 +175,16 @@
 			liCount = liElements.length,
 			liWidth = liElements[0].offsetWidth,
 			ulBeltLeft, // rename?
-			startX,
-			startY,
-			distX,
-			distY,
+			start,
+			dist,
 			dir,
-			totalDist,
-			currentIndex = this.index,
-			threshold = 150,
-			restraint = 100,
-			allowedTime = 500,
+			allowedTime = 400,
 			startTime,
 			elepsedTime;
 
 			
 		this.ulBelt.style.width = `${liWidth * liCount}px`;
-		this.ulBelt.style.transform = `translate3d(-${currentIndex * liWidth}px,0,0)`;
+		this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
 
 		// for Mouse
 		//------------------------------------------------------
@@ -199,15 +193,18 @@
 
 			this.ulBelt.style.transition = 'all 300ms ease-out';
 			ulBeltLeft = parseInt(getTransformValue(this.ulBelt));
-			startX = e.pageX;
+			start = e.pageX;
 			startTime = new Date().getTime();
 		});
 
 		this.slider.addEventListener('mouseup', (e) => {
-			distX = e.pageX - startX;
-			dir = (distX < 0) ? 'left' : 'right';
-			currentIndex = (dir == 'left') ? Math.min(currentIndex+1, liCount-1) : Math.max(currentIndex-1,0);
-			this.ulBelt.style.transform = `translate3d(-${currentIndex * liWidth}px,0,0)`;
+			dist = e.pageX - start;
+			dir = (dist < 0) ? 'left' : 'right';
+
+			if (dist < -100 || dist > 100) {
+				this.index = (dir == 'left') ? Math.min(this.index+1, liCount-1) : Math.max(this.index-1,0);
+				this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
+			}
 		});
 
 
@@ -219,18 +216,16 @@
 			this.ulBelt.style.transition = 'all 300ms ease-out';
 			ulBeltLeft = parseInt(getTransformValue(this.ulBelt));
 			let touchObj = e.changedTouches[0];
-			startX = touchObj.pageX;
-			startY = touchObj.pageY;
+			start = touchObj.pageX;
 			startTime = new Date().getTime();
 		});
 
 		this.slider.addEventListener('touchmove', (e) => {
 			e.preventDefault();
 
-			let touchObj = e.changedTouches[0];
-			totalDist = distX + ulBeltLeft;
-			distX = touchObj.pageX - startX;
-			dir = (distX < 0) ? 'left' : 'right';
+			let touchObj = e.changedTouches[0]
+			dist = touchObj.pageX - start;
+			dir = (dist < 0) ? 'left' : 'right';
 		});
 
 		this.slider.addEventListener('touchend', (e) => {
@@ -238,9 +233,10 @@
 
 			elepsedTime = new Date().getTime() - startTime;
 
-			if (elepsedTime < allowedTime) {
-				currentIndex = (dir == 'left') ? Math.min(currentIndex+1, liCount-1) : Math.max(currentIndex-1, 0);
-				this.ulBelt.style.transform = `translate3d(-${currentIndex * liWidth}px,0,0)`;
+			if (elepsedTime < allowedTime && (dist < -150 || dist > 150)) {
+				this.index = (dir == 'left') ? Math.min(this.index+1, liCount-1) : Math.max(this.index-1, 0);
+				this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
+				dist = 0;
 			}
 		});
 	}
