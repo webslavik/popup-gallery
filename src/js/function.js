@@ -46,6 +46,7 @@
 		this.moveSlider();
 		this.sliderArrows();
 		this.thumbnailsActions();
+		this.moveThumbnailsBelt();
 
 		this.overlay.classList.add('is-open');
 
@@ -164,13 +165,93 @@
 		});
 	}
 
-	SkySlider.prototype.changeActiveThubmnail = function() {
+	SkySlider.prototype.changeActiveThumbnail = function() {
 		let thumbnails = this.thumbnailsList.children;
 
 		for (let i = 0; i < thumbnails.length; i++) {
 			if (this.index === i) thumbnails[i].classList.add('is-current');
 			else thumbnails[i].classList.remove('is-current');
 		}
+	}
+
+	SkySlider.prototype.moveThumbnailsBelt = function() {
+		let self = this; // test
+
+		let thumbnails = this.thumbnailsList.children,
+			thumbnailsLength = thumbnails.length,
+			thumbnailWidth = thumbnails[0].offsetWidth,
+			allowedTime = 400,
+			listOffset,
+			start,
+			dist,
+			totalDist;
+
+		self.thumbnailsWrap.style.width = self.options.showThumbItems * thumbnailWidth + 'px';
+		self.thumbnailsList.style.width = thumbnailsLength * thumbnailWidth + 'px';
+		self.thumbnailsList.style.transform = 'translate3d(0,0,0)';
+
+
+		// for Mouse
+		//------------------------------------------------------
+		self.thumbnailsWrap.addEventListener('mousedown', (e) => {
+			e.preventDefault();
+
+			listOffset = parseInt(getTransformValue(self.thumbnailsList));
+			start = e.pageX;
+
+			self.thumbnailsWrap.addEventListener('mousemove', onMouseMove);
+		});
+
+		function onMouseMove(e) {
+			e.preventDefault();
+
+			dist = e.pageX - start;
+			totalDist = dist + listOffset;
+
+			if (totalDist <= -(thumbnailWidth * thumbnailsLength - thumbnailWidth * self.options.showThumbItems)) {
+				self.thumbnailsList.style.transform = `translate3d(-${(thumbnailWidth * thumbnailsLength) - (thumbnailWidth * self.options.showThumbItems)}px,0,0)`;
+			} else if (totalDist >= 0) {
+				self.thumbnailsList.style.transform = `translate3d(0,0,0)`;			
+			} else {
+				self.thumbnailsList.style.transform = `translate3d(${totalDist}px,0,0)`;
+			}
+
+		}
+
+		this.thumbnailsWrap.addEventListener('mouseup', () => {
+			this.thumbnailsWrap.removeEventListener('mousemove', onMouseMove);
+		});
+
+		this.thumbnailsWrap.addEventListener('mouseleave', () => {
+			this.thumbnailsWrap.removeEventListener('mousemove', onMouseMove);
+		});
+
+
+		// for Touch
+		//------------------------------------------------------
+		this.thumbnailsWrap.addEventListener('touchstart', (e) => {
+			e.preventDefault();
+
+			listOffset = parseInt(getTransformValue(self.thumbnailsList));
+			let touchObj = e.changedTouches[0];
+			start = touchObj.pageX;
+		});
+
+		this.thumbnailsWrap.addEventListener('touchmove', (e) => {
+			e.preventDefault();
+
+			let touchObj = e.changedTouches[0];
+			dist = touchObj.pageX - start;
+			totalDist = dist + listOffset;
+			if (totalDist <= -(thumbnailWidth * thumbnailsLength - thumbnailWidth * self.options.showThumbItems)) {
+				self.thumbnailsList.style.transform = `translate3d(-${(thumbnailWidth * thumbnailsLength) - (thumbnailWidth * self.options.showThumbItems)}px,0,0)`;
+			} else if (totalDist >= 0) {
+				self.thumbnailsList.style.transform = `translate3d(0,0,0)`;			
+			} else {
+				self.thumbnailsList.style.transform = `translate3d(${totalDist}px,0,0)`;
+			}
+		});
+
 	}
 
 	SkySlider.prototype.moveSlider = function() {
@@ -208,7 +289,7 @@
 			if (dist < -100 || dist > 100) {
 				this.index = (dir == 'left') ? Math.min(this.index+1, liCount-1) : Math.max(this.index-1,0);
 				this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
-				this.changeActiveThubmnail();
+				this.changeActiveThumbnail();
 			}
 		});
 
@@ -243,7 +324,7 @@
 				this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
 				dist = 0;
 
-				this.changeActiveThubmnail();
+				this.changeActiveThumbnail();
 			}
 		});
 	}
@@ -262,7 +343,7 @@
 
 			this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
 
-			this.changeActiveThubmnail();
+			this.changeActiveThumbnail();
 		});
 
 		this.next.addEventListener('click', () => {
@@ -275,7 +356,7 @@
 
 			this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
 
-			this.changeActiveThubmnail();
+			this.changeActiveThumbnail();
 		});
 	}
 
