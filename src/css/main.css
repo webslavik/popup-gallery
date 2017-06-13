@@ -871,9 +871,6 @@ p {
   position: absolute;
   bottom: 2%;
   left: 50%;
-  -webkit-transition: 1ms opacity ease;
-  -o-transition: 1ms opacity ease;
-  transition: 1ms opacity ease;
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
@@ -886,7 +883,9 @@ p {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 1048px;
+  -webkit-transition: all 400ms ease-out;
+  -o-transition: all 400ms ease-out;
+  transition: all 400ms ease-out;
 }
 
 .skySlider-thumbnail {
@@ -898,9 +897,9 @@ p {
   -webkit-transform: translateY(0);
   -ms-transform: translateY(0);
   transform: translateY(0);
-  cursor: pointer;
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  cursor: pointer;
 }
 
 .skySlider-thumbnail:hover {

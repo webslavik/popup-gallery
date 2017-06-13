@@ -37,16 +37,16 @@
 		this.thumbnail = null;
 
 		this.index = 0;
-		this.total = 0;
 	};
 
 	SkySlider.prototype.open = function(index) {
-
 		this.index = index;
+
 		this.create();
 		this.moveSlider();
 		this.sliderArrows();
 		this.thumbnailsActions();
+
 		this.overlay.classList.add('is-open');
 
 		this.overlay.addEventListener('click', (e) => {
@@ -63,18 +63,25 @@
 	}
 
 	SkySlider.prototype.create = function() {
-		let docFrag = document.createDocumentFragment();
-		
 		this.overlay = document.createElement('div');
 		this.overlay.classList.add('skySlider-overlay');
-		docFrag.appendChild(this.overlay);
 		
+		// create Slider
+		//-------------------------------------------------------
+		this.overlay.appendChild(this.createSlider());
+
+
+		// create Thumbnails
+		//--------------------------------------------------------
+		this.overlay.appendChild(this.createThumbnails());
+
+		document.body.appendChild(this.overlay);
+	}
+
+	SkySlider.prototype.createSlider = function() {
 		this.sliderWrap = document.createElement('div');
 		this.sliderWrap.classList.add('skySlider-slider-wrap');
-		this.overlay.appendChild(this.sliderWrap);
 
-		// create Slider navigations
-		//--------------------------------------------------------
 		this.next = document.createElement('div');
 		this.next.classList.add('skySlider-arrow', 'next');
 		this.next.innerHTML = 'next';
@@ -86,14 +93,15 @@
 		this.sliderWrap.appendChild(this.next);
 		this.sliderWrap.appendChild(this.prev);
 
-		// create Images list
-		//--------------------------------------------------------
+
 		this.slider = document.createElement('div');
 		this.slider.classList.add('skySlider-slider');
 		this.sliderWrap.appendChild(this.slider);
 
 		this.ulBelt = document.createElement('ul');
 		this.ulBelt.classList.add('skySlider-slider-belt');
+		this.slider.appendChild(this.ulBelt);
+
 
 		for (let i = 0; i < this.images.length; i++) {
 			this.li = document.createElement('li');
@@ -106,14 +114,16 @@
 			this.li.appendChild(this.img);
 			this.ulBelt.appendChild(this.li)
 		}
-		this.total = this.ulBelt.children.length;
 
-		this.slider.appendChild(this.ulBelt);
+		return this.sliderWrap;
+	}
 
-		// create Thumbnails
-		//--------------------------------------------------------
+
+	SkySlider.prototype.createThumbnails = function() {
+
 		this.thumbnailsWrap = document.createElement('div');
 		this.thumbnailsWrap.classList.add('skySlider-thumbnails-wrap');
+
 		this.thumbnailsList = document.createElement('ul');
 		this.thumbnailsList.classList.add('skySlider-thumbnails-list');
 
@@ -129,9 +139,8 @@
 			this.thumbnailsList.appendChild(this.thumbnail);
 		}
 		this.thumbnailsWrap.appendChild(this.thumbnailsList);
-		this.overlay.appendChild(this.thumbnailsWrap);
 
-		document.body.appendChild(docFrag);
+		return this.thumbnailsWrap;
 	}
 
 	SkySlider.prototype.thumbnailsActions = function() {
