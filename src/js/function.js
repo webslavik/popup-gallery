@@ -120,9 +120,9 @@
 
 
 	SkySlider.prototype.createThumbnails = function() {
-
 		this.thumbnailsWrap = document.createElement('div');
 		this.thumbnailsWrap.classList.add('skySlider-thumbnails-wrap');
+		// this.
 
 		this.thumbnailsList = document.createElement('ul');
 		this.thumbnailsList.classList.add('skySlider-thumbnails-list');
@@ -144,7 +144,8 @@
 	}
 
 	SkySlider.prototype.thumbnailsActions = function() {
-		let thumbnails = this.thumbnailsList.children;
+		let thumbnails = this.thumbnailsList.children,
+			liWidth = this.li.offsetWidth;
 
 		Array.from(thumbnails, (el, index) => {
 			el.addEventListener('click', () => {
@@ -157,28 +158,22 @@
 				el.classList.add('is-current');
 
 				this.index = index;
-				// this.slideTo(index);
+				this.ulBelt.style.transition = 'all 300ms ease-out';
+				this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
 			});
 		});
 	}
-	
 
-
-	SkySlider.prototype.thumbnailActive = function() {
+	SkySlider.prototype.changeActiveThubmnail = function() {
 		let thumbnails = this.thumbnailsList.children;
-		Array.from(thumbnails, (el, index) => {
-			let siblings = el.parentNode.children;
 
-			for (let i = 0; i < siblings.length; i++) 
-				if (siblings[i].classList.contains('is-current'))
-					siblings[i].classList.remove('is-current');
-			
-				siblings[this.index].classList.add('is-current');
-		});
+		for (let i = 0; i < thumbnails.length; i++) {
+			if (this.index === i) thumbnails[i].classList.add('is-current');
+			else thumbnails[i].classList.remove('is-current');
+		}
 	}
 
 	SkySlider.prototype.moveSlider = function() {
-
 		let sliderWidth = this.slider.offsetWidth,
 			liElements = this.ulBelt.children,
 			liCount = liElements.length,
@@ -213,6 +208,7 @@
 			if (dist < -100 || dist > 100) {
 				this.index = (dir == 'left') ? Math.min(this.index+1, liCount-1) : Math.max(this.index-1,0);
 				this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
+				this.changeActiveThubmnail();
 			}
 		});
 
@@ -246,6 +242,8 @@
 				this.index = (dir == 'left') ? Math.min(this.index+1, liCount-1) : Math.max(this.index-1, 0);
 				this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
 				dist = 0;
+
+				this.changeActiveThubmnail();
 			}
 		});
 	}
@@ -263,6 +261,8 @@
 			}
 
 			this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
+
+			this.changeActiveThubmnail();
 		});
 
 		this.next.addEventListener('click', () => {
@@ -274,6 +274,8 @@
 			}
 
 			this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
+
+			this.changeActiveThubmnail();
 		});
 	}
 
