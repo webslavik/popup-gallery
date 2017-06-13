@@ -12,6 +12,7 @@
 	}
 
 	SkySlider.prototype.init = function() {
+		// this.body = document.querySelector('body');
 		this.el = document.querySelector('.skySlider');
 		this.children = this.el.children;
 		this.images = this.el.querySelectorAll('img');
@@ -47,6 +48,7 @@
 		this.sliderArrows();
 		this.thumbnailsActions();
 		this.moveThumbnailsBelt();
+		this.keyboardNavigation();
 
 		this.overlay.classList.add('is-open');
 
@@ -358,6 +360,40 @@
 			this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
 
 			this.changeActiveThumbnail();
+		});
+	}
+
+	SkySlider.prototype.keyboardNavigation = function() {
+		let body = document.querySelector('body');
+		let	liLength = this.ulBelt.children.length,
+			liWidth = this.li.offsetWidth;
+
+		console.info('Current index: ' + this.index);
+
+		body.addEventListener('keyup', (e) => {
+			if (e.keyCode == 37) {
+				this.ulBelt.style.transition = 'all 300ms ease-out';
+				this.index--;
+				debugger;
+				console.log('Left: ' + this.index);
+
+
+				if (this.index <= 0) this.index = 0;
+
+				this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
+				this.changeActiveThumbnail();
+			}
+			if (e.keyCode == 39) {
+				this.index++;
+				this.ulBelt.style.transition = 'all 300ms ease-out';
+
+				console.log('Right: ' + this.index);
+
+				if (this.index == liLength) this.index = liLength-1;
+
+				this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
+				this.changeActiveThumbnail();
+			}
 		});
 	}
 
