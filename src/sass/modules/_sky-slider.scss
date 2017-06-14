@@ -16,6 +16,24 @@
     }
 }
 
+.skySlider-close {
+    display: block;
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    cursor: pointer;
+
+    // padding: 8px;
+
+    svg {
+        width: 32px;
+        height: 32px;
+        fill: #ffffff;
+    }
+}
+
 
 // Big Images
 //---------------------------------------
@@ -30,15 +48,18 @@
 }
 
 .skySlider-arrow {
-    padding: 8px 16px;
+    padding: 8px 8px;
     position: absolute;
-    top: 50%;
+    top: calc(50% - 28px);
     z-index: 10;
     cursor: pointer;
 
-    font-size: 20px;
-    color: white;
-    font-weight: bold;
+    svg {
+        width: 48px;
+        height: 48px;
+        fill: #ffffff;
+    }
+
     &.next {
         right: -80px;
     }

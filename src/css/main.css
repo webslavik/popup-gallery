@@ -819,6 +819,22 @@ p {
   opacity: 1;
 }
 
+.skySlider-close {
+  display: block;
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  cursor: pointer;
+}
+
+.skySlider-close svg {
+  width: 32px;
+  height: 32px;
+  fill: #ffffff;
+}
+
 .skySlider-slider-wrap {
   position: absolute;
   top: 40%;
@@ -833,14 +849,18 @@ p {
 }
 
 .skySlider-arrow {
-  padding: 8px 16px;
+  padding: 8px 8px;
   position: absolute;
-  top: 50%;
+  top: -webkit-calc(50% - 28px);
+  top: calc(50% - 28px);
   z-index: 10;
   cursor: pointer;
-  font-size: 20px;
-  color: white;
-  font-weight: bold;
+}
+
+.skySlider-arrow svg {
+  width: 48px;
+  height: 48px;
+  fill: #ffffff;
 }
 
 .skySlider-arrow.next {
