@@ -20,7 +20,7 @@
 		let el = document.querySelector('.skySlider'),
 			children = el.children;
 
-		_.images = el.querySelectorAll('img');
+		_.imagesUrl = getImagesUrl(el.querySelectorAll('img'));
 
 		Array.from(children, (el, index) => {
 			el.addEventListener('click', (e) => {
@@ -61,7 +61,6 @@
 		//-------------------------------------------------------
 		_.overlay.appendChild(_.createSlider());
 
-
 		// create Thumbnails
 		//--------------------------------------------------------
 		_.overlay.appendChild(_.createThumbnails());
@@ -94,14 +93,14 @@
 		_.slider.appendChild(_.ulBelt);
 
 
-		for (let i = 0; i < _.images.length; i++) {
+		for (let i = 0; i < _.imagesUrl.length; i++) {
 			_.li = document.createElement('li');
 			_.li.classList.add('skySlider-slide')
 			if (_.currentIndex === i) {
 				_.li.classList.add('is-current');
 			}
 			_.img = document.createElement('img');
-			_.img.setAttribute('src', _.images[i].getAttribute('src'));
+			_.img.setAttribute('src', _.imagesUrl[i]);
 			_.li.appendChild(_.img);
 			_.ulBelt.appendChild(_.li)
 		}
@@ -113,19 +112,18 @@
 	SkySlider.prototype.createThumbnails = function() {
 		_.thumbnailsWrap = document.createElement('div');
 		_.thumbnailsWrap.classList.add('skySlider-thumbnails-wrap');
-		// _.
 
 		_.thumbnailsList = document.createElement('ul');
 		_.thumbnailsList.classList.add('skySlider-thumbnails-list');
 
-		for (let i = 0; i < _.images.length; i++) {
+		for (let i = 0; i < _.imagesUrl.length; i++) {
 			_.thumbnail = document.createElement('li');
 			_.thumbnail.classList.add('skySlider-thumbnail')
 			if (_.currentIndex === i) {
 				_.thumbnail.classList.add('is-current');
 			}
 			_.img = document.createElement('img');
-			_.img.setAttribute('src', _.images[i].getAttribute('src'));
+			_.img.setAttribute('src', _.imagesUrl[i]);
 			_.thumbnail.appendChild(_.img);
 			_.thumbnailsList.appendChild(_.thumbnail);
 		}
@@ -250,7 +248,7 @@
 			liElements = _.ulBelt.children,
 			liCount = liElements.length,
 			liWidth = liElements[0].offsetWidth,
-			ulBeltLeft, // rename?
+			beltOffset,
 			start,
 			dist,
 			dir,
@@ -268,7 +266,7 @@
 			e.preventDefault();
 
 			_.ulBelt.style.transition = 'all 300ms ease-out';
-			ulBeltLeft = parseInt(getTransformValue(_.ulBelt));
+			beltOffset = parseInt(getTransformValue(_.ulBelt));
 			start = e.pageX;
 			startTime = new Date().getTime();
 		});
@@ -291,7 +289,7 @@
 			e.preventDefault();
 
 			_.ulBelt.style.transition = 'all 300ms ease-out';
-			ulBeltLeft = parseInt(getTransformValue(_.ulBelt));
+			beltOffset = parseInt(getTransformValue(_.ulBelt));
 			let touchObj = e.changedTouches[0];
 			start = touchObj.pageX;
 			startTime = new Date().getTime();
@@ -385,6 +383,16 @@
 	}
 
 
+	// get images url
+	//--------------------------------------------
+	function getImagesUrl(imagesEl) {
+		let imagesUrl = [];
+
+		for (let i = 0; i < imagesEl.length; i++) {
+			imagesUrl.push(imagesEl[i].getAttribute('src'));
+		}
+		return imagesUrl;
+	}
 
 	// get translate3d value
 	//--------------------------------------------
