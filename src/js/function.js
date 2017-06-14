@@ -8,8 +8,6 @@
 		_ = this;
 
 		_.currentIndex;
-		_.transitionEnd = transitionSelect();
-
 
 		_.options = {
 			thumbnailsItemCount: 5,
@@ -17,6 +15,7 @@
 		};
 
 		_.defaults = {
+			thumbChildWidth: null,
 			prevArrow: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250.738 250.738"><path d="M96.633 125.37l95.053-94.534c7.1-7.055 7.1-18.492 0-25.546-7.1-7.054-18.613-7.054-25.714 0L58.99 111.69c-3.785 3.758-5.488 8.758-5.24 13.68-.248 4.92 1.455 9.92 5.24 13.68L165.97 245.448c7.1 7.055 18.613 7.055 25.714 0 7.1-7.054 7.1-18.49 0-25.544L96.633 125.37z" fill-rule="evenodd" clip-rule="evenodd"/></svg>',
 			nextArrow: '<svg xmlns="http://www.w3.org/2000/svg" width="451.846" height="451.847" viewBox="0 0 451.846 451.847"><path d="M345.44 248.292l-194.286 194.28c-12.36 12.366-32.397 12.366-44.75 0-12.354-12.353-12.354-32.39 0-44.743l171.914-171.91-171.91-171.903c-12.353-12.36-12.353-32.394 0-44.748 12.355-12.36 32.392-12.36 44.75 0l194.288 194.283c6.177 6.18 9.262 14.27 9.262 22.366 0 8.098-3.09 16.195-9.267 22.372z"/></svg>',
 			closeBtn: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982"><path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/></svg>'
@@ -157,8 +156,6 @@
 		}
 		_.thumbnailsWrap.appendChild(_.thumbnailsList);
 
-
-
 		return _.thumbnailsWrap;
 	}
 
@@ -292,8 +289,10 @@
 		_.ulBelt.style.width = `${liWidth * liCount}px`;
 		_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 
-		// for Mouse
-		//------------------------------------------------------
+
+		/**
+		 * 	for Mouse
+		 */
 		_.slider.addEventListener('mousedown', (e) => {
 			e.preventDefault();
 
@@ -310,13 +309,17 @@
 			if (dist < -100 || dist > 100) {
 				_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, liCount-1) : Math.max(_.currentIndex-1,0);
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
+
 				if (_.options.showThumbnails) _.changeActiveThumbnail();
+
+				moveBeltWithArrow();
 			}
 		});
 
 
-		// for Touch
-		//------------------------------------------------------
+		/**
+		 * 	for Touch
+		 */
 		_.slider.addEventListener('touchstart', (e) => {
 			e.preventDefault();
 
@@ -346,6 +349,8 @@
 				dist = 0;
 
 				if (_.options.showThumbnails) _.changeActiveThumbnail();
+
+				moveBeltWithArrow();
 			}
 		});
 	}
@@ -365,6 +370,8 @@
 			_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 
 			if (_.options.showThumbnails) _.changeActiveThumbnail();
+
+			moveBeltWithArrow();
 		});
 
 		_.next.addEventListener('click', () => {
@@ -378,7 +385,24 @@
 			_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 
 			if (_.options.showThumbnails) _.changeActiveThumbnail();
+
+			moveBeltWithArrow();
 		});
+	}
+
+	function moveBeltWithArrow() {
+		let thumbnails = _.thumbnailsList.children,
+			thumbnailWidth = thumbnails[0].offsetWidth;
+
+		let offset = _.currentIndex - (Math.floor(_.options.thumbnailsItemCount / 2));
+
+		/**
+		 * 	rewrite!!!
+		 * 	worked only 5 items
+		 */
+		if (offset >= 0 && offset <= (_.options.thumbnailsItemCount - (Math.floor(_.options.thumbnailsItemCount / 2)))) {
+			_.thumbnailsList.style.transform = `translate3d(-${offset * thumbnailWidth}px,0,0)`;
+		}
 	}
 
 	SkySlider.prototype.keyboardNavigation = function() {
@@ -451,15 +475,6 @@
 	function addListenerMulti(el, s, fn) {
 		s.split(' ').forEach(e => el.addEventListener(e, fn, false));
 	}
-
-
-	function transitionSelect() {
-		let el = document.createElement("div");
-		if (el.style.WebkitTransition) return "webkitTransitionEnd";
-		if (el.style.OTransition) return "oTransitionEnd";
-		return 'transitionend';
-  	}
-
 
 	// init Module
 	//--------------------------------------------

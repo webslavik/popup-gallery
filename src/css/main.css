@@ -910,7 +910,7 @@ p {
 
 .skySlider-thumbnail {
   width: 115px;
-  margin: 0 8px;
+  padding: 0 8px;
   -webkit-transition: all 200ms ease-out;
   -o-transition: all 200ms ease-out;
   transition: all 200ms ease-out;
