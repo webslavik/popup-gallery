@@ -1,154 +1,142 @@
 'use strict';
 
-(function() {
+;(function() {
 
-	function SkySlider() {
+	let _; // for `this`
 
-		this.options = {
-			showThumbItems: 5
+	function SkySlider(items = 5) {
+		_ = this;
+
+		_.currentIndex;
+
+		_.options = {
+			showThumbItems: items
 		};
 
-		this.init();
+		_.init();
 	}
 
 	SkySlider.prototype.init = function() {
-		// this.body = document.querySelector('body');
-		this.el = document.querySelector('.skySlider');
-		this.children = this.el.children;
-		this.images = this.el.querySelectorAll('img');
+		let el = document.querySelector('.skySlider'),
+			children = el.children;
 
-		Array.from(this.children, (el, index) => {
+		_.images = el.querySelectorAll('img');
+
+		Array.from(children, (el, index) => {
 			el.addEventListener('click', (e) => {
-				modal.open(index);
+				_.currentIndex = index;
+				_.open();
 			});
 		});
-
-		this.overlay = null;
-		this.sliderWrap = null;
-		this.slider = null;
-		this.ulBelt = null;
-		this.li = null;
-		this.img = null;
-
-		this.next = null;
-		this.prev = null;
-
-		this.thumbnailsWrap = null;
-		this.thumbnailsList = null;
-		this.thumbnail = null;
-
-		this.index = 0;
 	};
 
-	SkySlider.prototype.open = function(index) {
-		this.index = index;
+	SkySlider.prototype.open = function() {
+		_.create();
+		_.moveSlider();
+		_.sliderArrows();
+		_.thumbnailsActions();
+		_.moveThumbnailsBelt();
+		_.keyboardNavigation();
 
-		this.create();
-		this.moveSlider();
-		this.sliderArrows();
-		this.thumbnailsActions();
-		this.moveThumbnailsBelt();
-		this.keyboardNavigation();
+		_.overlay.classList.add('is-open');
 
-		this.overlay.classList.add('is-open');
+		_.close();
+	}
 
-		this.overlay.addEventListener('click', (e) => {
+	SkySlider.prototype.close = function() {
+		_.overlay.addEventListener('click', (e) => {
 			let target = e.target;
 			if (!target.classList.contains('skySlider-overlay')) {
 				return false;
 			}
-			this.close();
+			_.overlay.parentNode.removeChild(_.overlay);
 		});
 	}
 
-	SkySlider.prototype.close = function() {
-		this.overlay.parentNode.removeChild(this.overlay);
-	}
-
 	SkySlider.prototype.create = function() {
-		this.overlay = document.createElement('div');
-		this.overlay.classList.add('skySlider-overlay');
+		_.overlay = document.createElement('div');
+		_.overlay.classList.add('skySlider-overlay');
 		
 		// create Slider
 		//-------------------------------------------------------
-		this.overlay.appendChild(this.createSlider());
+		_.overlay.appendChild(_.createSlider());
 
 
 		// create Thumbnails
 		//--------------------------------------------------------
-		this.overlay.appendChild(this.createThumbnails());
+		_.overlay.appendChild(_.createThumbnails());
 
-		document.body.appendChild(this.overlay);
+		document.body.appendChild(_.overlay);
 	}
 
 	SkySlider.prototype.createSlider = function() {
-		this.sliderWrap = document.createElement('div');
-		this.sliderWrap.classList.add('skySlider-slider-wrap');
+		_.sliderWrap = document.createElement('div');
+		_.sliderWrap.classList.add('skySlider-slider-wrap');
 
-		this.next = document.createElement('div');
-		this.next.classList.add('skySlider-arrow', 'next');
-		this.next.innerHTML = 'next';
+		_.next = document.createElement('div');
+		_.next.classList.add('skySlider-arrow', 'next');
+		_.next.innerHTML = 'next';
 
-		this.prev = document.createElement('div');
-		this.prev.classList.add('skySlider-arrow', 'prev');
-		this.prev.innerHTML = 'prev';
+		_.prev = document.createElement('div');
+		_.prev.classList.add('skySlider-arrow', 'prev');
+		_.prev.innerHTML = 'prev';
 
-		this.sliderWrap.appendChild(this.next);
-		this.sliderWrap.appendChild(this.prev);
-
-
-		this.slider = document.createElement('div');
-		this.slider.classList.add('skySlider-slider');
-		this.sliderWrap.appendChild(this.slider);
-
-		this.ulBelt = document.createElement('ul');
-		this.ulBelt.classList.add('skySlider-slider-belt');
-		this.slider.appendChild(this.ulBelt);
+		_.sliderWrap.appendChild(_.next);
+		_.sliderWrap.appendChild(_.prev);
 
 
-		for (let i = 0; i < this.images.length; i++) {
-			this.li = document.createElement('li');
-			this.li.classList.add('skySlider-slide')
-			if (this.index === i) {
-				this.li.classList.add('is-current');
+		_.slider = document.createElement('div');
+		_.slider.classList.add('skySlider-slider');
+		_.sliderWrap.appendChild(_.slider);
+
+		_.ulBelt = document.createElement('ul');
+		_.ulBelt.classList.add('skySlider-slider-belt');
+		_.slider.appendChild(_.ulBelt);
+
+
+		for (let i = 0; i < _.images.length; i++) {
+			_.li = document.createElement('li');
+			_.li.classList.add('skySlider-slide')
+			if (_.currentIndex === i) {
+				_.li.classList.add('is-current');
 			}
-			this.img = document.createElement('img');
-			this.img.setAttribute('src', this.images[i].getAttribute('src'));
-			this.li.appendChild(this.img);
-			this.ulBelt.appendChild(this.li)
+			_.img = document.createElement('img');
+			_.img.setAttribute('src', _.images[i].getAttribute('src'));
+			_.li.appendChild(_.img);
+			_.ulBelt.appendChild(_.li)
 		}
 
-		return this.sliderWrap;
+		return _.sliderWrap;
 	}
 
 
 	SkySlider.prototype.createThumbnails = function() {
-		this.thumbnailsWrap = document.createElement('div');
-		this.thumbnailsWrap.classList.add('skySlider-thumbnails-wrap');
-		// this.
+		_.thumbnailsWrap = document.createElement('div');
+		_.thumbnailsWrap.classList.add('skySlider-thumbnails-wrap');
+		// _.
 
-		this.thumbnailsList = document.createElement('ul');
-		this.thumbnailsList.classList.add('skySlider-thumbnails-list');
+		_.thumbnailsList = document.createElement('ul');
+		_.thumbnailsList.classList.add('skySlider-thumbnails-list');
 
-		for (let i = 0; i < this.images.length; i++) {
-			this.thumbnail = document.createElement('li');
-			this.thumbnail.classList.add('skySlider-thumbnail')
-			if (this.index === i) {
-				this.thumbnail.classList.add('is-current');
+		for (let i = 0; i < _.images.length; i++) {
+			_.thumbnail = document.createElement('li');
+			_.thumbnail.classList.add('skySlider-thumbnail')
+			if (_.currentIndex === i) {
+				_.thumbnail.classList.add('is-current');
 			}
-			this.img = document.createElement('img');
-			this.img.setAttribute('src', this.images[i].getAttribute('src'));
-			this.thumbnail.appendChild(this.img);
-			this.thumbnailsList.appendChild(this.thumbnail);
+			_.img = document.createElement('img');
+			_.img.setAttribute('src', _.images[i].getAttribute('src'));
+			_.thumbnail.appendChild(_.img);
+			_.thumbnailsList.appendChild(_.thumbnail);
 		}
-		this.thumbnailsWrap.appendChild(this.thumbnailsList);
+		_.thumbnailsWrap.appendChild(_.thumbnailsList);
 
-		return this.thumbnailsWrap;
+		return _.thumbnailsWrap;
 	}
 
 	SkySlider.prototype.thumbnailsActions = function() {
-		let thumbnails = this.thumbnailsList.children,
-			liWidth = this.li.offsetWidth;
+		let thumbnails = _.thumbnailsList.children,
+			liWidth = _.li.offsetWidth;
 
 		Array.from(thumbnails, (el, index) => {
 
@@ -161,26 +149,26 @@
 
 				el.classList.add('is-current');
 
-				this.index = index;
-				this.ulBelt.style.transition = 'all 300ms ease-out';
-				this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
+				_.currentIndex = index;
+				_.ulBelt.style.transition = 'all 300ms ease-out';
+				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 			});
 		});
 	}
 
 	SkySlider.prototype.changeActiveThumbnail = function() {
-		let thumbnails = this.thumbnailsList.children;
+		let thumbnails = _.thumbnailsList.children;
 
 		for (let i = 0; i < thumbnails.length; i++) {
-			if (this.index === i) thumbnails[i].classList.add('is-current');
+			if (_.currentIndex === i) thumbnails[i].classList.add('is-current');
 			else thumbnails[i].classList.remove('is-current');
 		}
 	}
 
 	SkySlider.prototype.moveThumbnailsBelt = function() {
-		let self = this; // test
+		let self = _; // test
 
-		let thumbnails = this.thumbnailsList.children,
+		let thumbnails = _.thumbnailsList.children,
 			thumbnailsLength = thumbnails.length,
 			thumbnailWidth = thumbnails[0].offsetWidth,
 			allowedTime = 400,
@@ -221,18 +209,18 @@
 
 		}
 
-		this.thumbnailsWrap.addEventListener('mouseup', () => {
-			this.thumbnailsWrap.removeEventListener('mousemove', onMouseMove);
+		_.thumbnailsWrap.addEventListener('mouseup', () => {
+			_.thumbnailsWrap.removeEventListener('mousemove', onMouseMove);
 		});
 
-		this.thumbnailsWrap.addEventListener('mouseleave', () => {
-			this.thumbnailsWrap.removeEventListener('mousemove', onMouseMove);
+		_.thumbnailsWrap.addEventListener('mouseleave', () => {
+			_.thumbnailsWrap.removeEventListener('mousemove', onMouseMove);
 		});
 
 
 		// for Touch
 		//------------------------------------------------------
-		this.thumbnailsWrap.addEventListener('touchstart', (e) => {
+		_.thumbnailsWrap.addEventListener('touchstart', (e) => {
 			e.preventDefault();
 
 			listOffset = parseInt(getTransformValue(self.thumbnailsList));
@@ -240,7 +228,7 @@
 			start = touchObj.pageX;
 		});
 
-		this.thumbnailsWrap.addEventListener('touchmove', (e) => {
+		_.thumbnailsWrap.addEventListener('touchmove', (e) => {
 			e.preventDefault();
 
 			let touchObj = e.changedTouches[0];
@@ -258,8 +246,8 @@
 	}
 
 	SkySlider.prototype.moveSlider = function() {
-		let sliderWidth = this.slider.offsetWidth,
-			liElements = this.ulBelt.children,
+		let sliderWidth = _.slider.offsetWidth,
+			liElements = _.ulBelt.children,
 			liCount = liElements.length,
 			liWidth = liElements[0].offsetWidth,
 			ulBeltLeft, // rename?
@@ -271,45 +259,45 @@
 			elepsedTime;
 
 			
-		this.ulBelt.style.width = `${liWidth * liCount}px`;
-		this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
+		_.ulBelt.style.width = `${liWidth * liCount}px`;
+		_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 
 		// for Mouse
 		//------------------------------------------------------
-		this.slider.addEventListener('mousedown', (e) => {
+		_.slider.addEventListener('mousedown', (e) => {
 			e.preventDefault();
 
-			this.ulBelt.style.transition = 'all 300ms ease-out';
-			ulBeltLeft = parseInt(getTransformValue(this.ulBelt));
+			_.ulBelt.style.transition = 'all 300ms ease-out';
+			ulBeltLeft = parseInt(getTransformValue(_.ulBelt));
 			start = e.pageX;
 			startTime = new Date().getTime();
 		});
 
-		this.slider.addEventListener('mouseup', (e) => {
+		_.slider.addEventListener('mouseup', (e) => {
 			dist = e.pageX - start;
 			dir = (dist < 0) ? 'left' : 'right';
 
 			if (dist < -100 || dist > 100) {
-				this.index = (dir == 'left') ? Math.min(this.index+1, liCount-1) : Math.max(this.index-1,0);
-				this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
-				this.changeActiveThumbnail();
+				_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, liCount-1) : Math.max(_.currentIndex-1,0);
+				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
+				_.changeActiveThumbnail();
 			}
 		});
 
 
 		// for Touch
 		//------------------------------------------------------
-		this.slider.addEventListener('touchstart', (e) => {
+		_.slider.addEventListener('touchstart', (e) => {
 			e.preventDefault();
 
-			this.ulBelt.style.transition = 'all 300ms ease-out';
-			ulBeltLeft = parseInt(getTransformValue(this.ulBelt));
+			_.ulBelt.style.transition = 'all 300ms ease-out';
+			ulBeltLeft = parseInt(getTransformValue(_.ulBelt));
 			let touchObj = e.changedTouches[0];
 			start = touchObj.pageX;
 			startTime = new Date().getTime();
 		});
 
-		this.slider.addEventListener('touchmove', (e) => {
+		_.slider.addEventListener('touchmove', (e) => {
 			e.preventDefault();
 
 			let touchObj = e.changedTouches[0]
@@ -317,82 +305,81 @@
 			dir = (dist < 0) ? 'left' : 'right';
 		});
 
-		this.slider.addEventListener('touchend', (e) => {
+		_.slider.addEventListener('touchend', (e) => {
 			e.preventDefault();
 
 			elepsedTime = new Date().getTime() - startTime;
 
 			if (elepsedTime < allowedTime && (dist < -150 || dist > 150)) {
-				this.index = (dir == 'left') ? Math.min(this.index+1, liCount-1) : Math.max(this.index-1, 0);
-				this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
+				_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, liCount-1) : Math.max(_.currentIndex-1, 0);
+				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 				dist = 0;
 
-				this.changeActiveThumbnail();
+				_.changeActiveThumbnail();
 			}
 		});
 	}
 
 	SkySlider.prototype.sliderArrows = function() {
-		let liLength = this.ulBelt.children.length,
-			liWidth = this.li.offsetWidth;
+		let liLength = _.ulBelt.children.length,
+			liWidth = _.li.offsetWidth;
 
-		this.prev.addEventListener('click', () => {
-			this.index--;
-			this.ulBelt.style.transition = 'all 300ms ease-out';
+		_.prev.addEventListener('click', () => {
+			_.currentIndex--;
+			_.ulBelt.style.transition = 'all 300ms ease-out';
 
-			if (this.index < 0) {
-				this.index = 0;
+			if (_.currentIndex < 0) {
+				_.currentIndex = 0;
 			}
 
-			this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
+			_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 
-			this.changeActiveThumbnail();
+			_.changeActiveThumbnail();
 		});
 
-		this.next.addEventListener('click', () => {
-			this.index++;
-			this.ulBelt.style.transition = 'all 300ms ease-out';
+		_.next.addEventListener('click', () => {
+			_.currentIndex++;
+			_.ulBelt.style.transition = 'all 300ms ease-out';
 
-			if (this.index == liLength) {
-				this.index = liLength-1;
+			if (_.currentIndex == liLength) {
+				_.currentIndex = liLength-1;
 			}
 
-			this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
+			_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 
-			this.changeActiveThumbnail();
+			_.changeActiveThumbnail();
 		});
 	}
 
 	SkySlider.prototype.keyboardNavigation = function() {
 		let body = document.querySelector('body');
-		let	liLength = this.ulBelt.children.length,
-			liWidth = this.li.offsetWidth;
+		let	liLength = _.ulBelt.children.length,
+			liWidth = _.li.offsetWidth;
 
-		console.info('Current index: ' + this.index);
+		console.info('Current index: ' + _.currentIndex);
 
 		body.addEventListener('keyup', (e) => {
 			if (e.keyCode == 37) {
-				this.ulBelt.style.transition = 'all 300ms ease-out';
-				this.index--;
-				debugger;
-				console.log('Left: ' + this.index);
+				_.ulBelt.style.transition = 'all 300ms ease-out';
+				_.currentIndex--;
+				console.log('Left: ' + _.currentIndex);
 
 
-				if (this.index <= 0) this.index = 0;
+				if (_.currentIndex <= 0) _.currentIndex = 0;
 
-				this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
-				this.changeActiveThumbnail();
+				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
+				_.changeActiveThumbnail();
 			}
 			if (e.keyCode == 39) {
-				this.index++;
-				this.ulBelt.style.transition = 'all 300ms ease-out';
+				_.currentIndex++;
+				_.ulBelt.style.transition = 'all 300ms ease-out';
 
-				console.log('Right: ' + this.index);
+				console.log('Right: ' + _.currentIndex);
 
-				if (this.index == liLength) this.index = liLength-1;
+				if (_.currentIndex == liLength) _.currentIndex = liLength-1;
 
-				this.ulBelt.style.transform = `translate3d(-${this.index * liWidth}px,0,0)`;
-				this.changeActiveThumbnail();
+				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
+				_.changeActiveThumbnail();
 			}
 		});
 	}
@@ -415,8 +402,12 @@
 	}
 
 
-	//-------------------------------------------------
-	let modal = new SkySlider();
+	// init Module
+	//--------------------------------------------
+	window.SkySlider = SkySlider;
 
 })()
 
+
+
+let modal = new SkySlider();
