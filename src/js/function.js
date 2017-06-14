@@ -4,14 +4,18 @@
 
 	let _; // for `this`
 
-	function SkySlider(items = 5) {
+	function SkySlider() {
 		_ = this;
 
 		_.currentIndex;
-
 		_.options = {
-			showThumbItems: items
+			thumbnailsItemCount: 5,
+			showThumbnails: true
 		};
+
+		if (arguments[0] && typeof arguments[0] === 'object') {
+			_.options = extendDefaults(_.options, arguments[0]);
+		}
 
 		_.init();
 	}
@@ -34,8 +38,13 @@
 		_.create();
 		_.moveSlider();
 		_.sliderArrows();
-		_.thumbnailsActions();
-		_.moveThumbnailsBelt();
+
+		// refactoring
+		if (_.options.showThumbnails) {
+			_.moveThumbnailsBelt();
+			_.thumbnailsActions();
+		}
+
 		_.keyboardNavigation();
 
 		_.overlay.classList.add('is-open');
@@ -63,7 +72,7 @@
 
 		// create Thumbnails
 		//--------------------------------------------------------
-		_.overlay.appendChild(_.createThumbnails());
+		if (_.options.showThumbnails) _.overlay.appendChild(_.createThumbnails());
 
 		document.body.appendChild(_.overlay);
 	}
@@ -129,6 +138,8 @@
 		}
 		_.thumbnailsWrap.appendChild(_.thumbnailsList);
 
+
+
 		return _.thumbnailsWrap;
 	}
 
@@ -175,9 +186,11 @@
 			dist,
 			totalDist;
 
-		self.thumbnailsWrap.style.width = self.options.showThumbItems * thumbnailWidth + 'px';
-		self.thumbnailsList.style.width = thumbnailsLength * thumbnailWidth + 'px';
-		self.thumbnailsList.style.transform = 'translate3d(0,0,0)';
+		_.thumbnailsWrap.style.width = _.options.thumbnailsItemCount * thumbnailWidth + 'px';
+		_.thumbnailsList.style.width = thumbnailsLength * thumbnailWidth + 'px';
+		_.thumbnailsList.style.transform = 'translate3d(0,0,0)';
+
+		// console.log(_.thumbnailsList.children[0].offsetWidth);
 
 
 		// for Mouse
@@ -197,8 +210,8 @@
 			dist = e.pageX - start;
 			totalDist = dist + listOffset;
 
-			if (totalDist <= -(thumbnailWidth * thumbnailsLength - thumbnailWidth * self.options.showThumbItems)) {
-				self.thumbnailsList.style.transform = `translate3d(-${(thumbnailWidth * thumbnailsLength) - (thumbnailWidth * self.options.showThumbItems)}px,0,0)`;
+			if (totalDist <= -(thumbnailWidth * thumbnailsLength - thumbnailWidth * self.options.thumbnailsItemCount)) {
+				self.thumbnailsList.style.transform = `translate3d(-${(thumbnailWidth * thumbnailsLength) - (thumbnailWidth * self.options.thumbnailsItemCount)}px,0,0)`;
 			} else if (totalDist >= 0) {
 				self.thumbnailsList.style.transform = `translate3d(0,0,0)`;			
 			} else {
@@ -232,8 +245,8 @@
 			let touchObj = e.changedTouches[0];
 			dist = touchObj.pageX - start;
 			totalDist = dist + listOffset;
-			if (totalDist <= -(thumbnailWidth * thumbnailsLength - thumbnailWidth * self.options.showThumbItems)) {
-				self.thumbnailsList.style.transform = `translate3d(-${(thumbnailWidth * thumbnailsLength) - (thumbnailWidth * self.options.showThumbItems)}px,0,0)`;
+			if (totalDist <= -(thumbnailWidth * thumbnailsLength - thumbnailWidth * self.options.thumbnailsItemCount)) {
+				self.thumbnailsList.style.transform = `translate3d(-${(thumbnailWidth * thumbnailsLength) - (thumbnailWidth * self.options.thumbnailsItemCount)}px,0,0)`;
 			} else if (totalDist >= 0) {
 				self.thumbnailsList.style.transform = `translate3d(0,0,0)`;			
 			} else {
@@ -278,7 +291,7 @@
 			if (dist < -100 || dist > 100) {
 				_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, liCount-1) : Math.max(_.currentIndex-1,0);
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-				_.changeActiveThumbnail();
+				if (_.options.showThumbnails) _.changeActiveThumbnail();
 			}
 		});
 
@@ -313,7 +326,7 @@
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 				dist = 0;
 
-				_.changeActiveThumbnail();
+				if (_.options.showThumbnails) _.changeActiveThumbnail();
 			}
 		});
 	}
@@ -332,7 +345,7 @@
 
 			_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 
-			_.changeActiveThumbnail();
+			if (_.options.showThumbnails) _.changeActiveThumbnail();
 		});
 
 		_.next.addEventListener('click', () => {
@@ -345,7 +358,7 @@
 
 			_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 
-			_.changeActiveThumbnail();
+			if (_.options.showThumbnails) _.changeActiveThumbnail();
 		});
 	}
 
@@ -354,30 +367,29 @@
 		let	liLength = _.ulBelt.children.length,
 			liWidth = _.li.offsetWidth;
 
-		console.info('Current index: ' + _.currentIndex);
+		// console.info('Current index: ' + _.currentIndex);
 
 		body.addEventListener('keyup', (e) => {
 			if (e.keyCode == 37) {
 				_.ulBelt.style.transition = 'all 300ms ease-out';
 				_.currentIndex--;
-				console.log('Left: ' + _.currentIndex);
-
+				// console.log('Left: ' + _.currentIndex);
 
 				if (_.currentIndex <= 0) _.currentIndex = 0;
 
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-				_.changeActiveThumbnail();
+				if (_.options.showThumbnails) _.changeActiveThumbnail();
 			}
 			if (e.keyCode == 39) {
 				_.currentIndex++;
 				_.ulBelt.style.transition = 'all 300ms ease-out';
 
-				console.log('Right: ' + _.currentIndex);
+				// console.log('Right: ' + _.currentIndex);
 
 				if (_.currentIndex == liLength) _.currentIndex = liLength-1;
 
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-				_.changeActiveThumbnail();
+				if (_.options.showThumbnails) _.changeActiveThumbnail();
 			}
 		});
 	}
@@ -392,6 +404,18 @@
 			imagesUrl.push(imagesEl[i].getAttribute('src'));
 		}
 		return imagesUrl;
+	}
+
+
+	// extend property
+	//--------------------------------------------
+	function extendDefaults(source, properties) {
+		for (let property in properties) {
+			if (properties.hasOwnProperty(property)) {
+				source[property] = properties[property];
+			}
+		}
+		return source;
 	}
 
 	// get translate3d value
@@ -418,4 +442,10 @@
 
 
 
-let modal = new SkySlider();
+let modal = new SkySlider({
+	thumbnailsItemCount: 5,
+	showThumbnails: true
+});
+
+
+// let modal = new SkySlider();
