@@ -68,6 +68,8 @@
 		_.overlay.classList.add('is-open');
 		_.close();
 		initSliderWith();
+		_.changeActiveThumbnail();
+		moveBeltWithArrow();
 	}
 
 
@@ -437,11 +439,18 @@
 		let offset = _.currentIndex - (Math.floor(_.options.thumbnailsItemCount / 2));
 
 		/**
-		 * 	rewrite!!!
-		 * 	worked only 5 items
+		 * rewrite!!!
+		 * -----------
+		 * correctly work only: _.options.thumbnailsItemCount = 5
 		 */
-		if (offset >= 0 && offset <= (_.options.thumbnailsItemCount - (Math.floor(_.options.thumbnailsItemCount / 2)))) {
+		if (offset >= 0 && offset <= (thumbnails.length - _.options.thumbnailsItemCount)) {
 			_.thumbnailsList.style.transform = `translate3d(-${offset * thumbnailWidth}px,0,0)`;
+		}
+		if (_.currentIndex == 0 || _.currentIndex == 1) {
+			_.thumbnailsList.style.transform = `translate3d(-0,0,0)`;
+		}
+		if (_.currentIndex == (thumbnails.length - 1) || _.currentIndex == (thumbnails.length - 2)) {
+			_.thumbnailsList.style.transform = `translate3d(-${(thumbnails.length - _.options.thumbnailsItemCount) * thumbnailWidth}px,0,0)`;
 		}
 	}
 
