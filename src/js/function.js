@@ -34,15 +34,6 @@
 
 		_.imagesUrl = getImagesUrl(el.querySelectorAll('img'));
 
-		Array.from(children, (el, index) => {
-			el.addEventListener('click', (e) => {
-				_.currentIndex = index;
-				_.open();
-			});
-		});
-	};
-
-	SkySlider.prototype.open = function() {
 		_.create();
 		_.moveSlider();
 		_.sliderArrows();
@@ -55,8 +46,17 @@
 
 		_.keyboardNavigation();
 
-		_.overlay.classList.add('is-open');
+		Array.from(children, (el, index) => {
+			el.addEventListener('click', (e) => {
+				_.currentIndex = index;
+				_.open();
+				console.log(_.currentIndex);
+			});
+		});
+	};
 
+	SkySlider.prototype.open = function() {
+		_.overlay.classList.add('is-open');
 		_.close();
 	}
 
@@ -65,14 +65,16 @@
 			let target = e.target;
 			
 			if (target.parentElement.parentElement.classList.contains('skySlider-close')) {
-				_.overlay.parentNode.removeChild(_.overlay);
+				// _.overlay.parentNode.removeChild(_.overlay);
+				_.overlay.classList.remove('is-open');
 			}
 			
 			if (!target.classList.contains('skySlider-overlay')) {
 				return false;
 			}
 
-			_.overlay.parentNode.removeChild(_.overlay);
+			_.overlay.classList.remove('is-open');
+			// _.overlay.parentNode.removeChild(_.overlay);
 		});
 	}
 

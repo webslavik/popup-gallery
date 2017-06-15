@@ -5,14 +5,16 @@
     top: 0;
     left: 0;
     z-index: 9998;
-    transition: 1ms opacity ease;
     background-color: rgba(0,0,0,.8);
 
-    opacity: 0;
     user-select: none;
+    transition: all 200ms ease-out;
+    opacity: 0;
+    pointer-events: none;
 
     &.is-open {
-        opacity: 1
+        opacity: 1;
+        pointer-events: auto;
     }
 }
 
@@ -24,8 +26,6 @@
     top: 16px;
     right: 24px;
     cursor: pointer;
-
-    // padding: 8px;
 
     svg {
         width: 32px;
