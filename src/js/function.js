@@ -34,46 +34,42 @@
 			_.options = extendDefaults(_.options, arguments[0]);
 		}
 
-		_.init();
+		init();
 	}
 
-	SkySlider.prototype.init = function() {
+	function init() {
 		let el = document.querySelector('.skySlider'),
 			children = el.children;
 
 		_.imagesUrl = getImagesUrl(el.querySelectorAll('img'));
 
-		_.create();
-		_.moveSlider();
-		_.sliderArrows();
-
-		// refactoring
+		create();
+		moveSlider();
+		sliderArrows();
+		keyboardNavigation();
 		if (_.options.showThumbnails) {
-			_.moveThumbnailsBelt();
-			_.thumbnailsActions();
+			moveThumbnailsBelt();
+			thumbnailsActions();
 		}
-
-		_.keyboardNavigation();
-
 
 		Array.from(children, (el, index) => {
 			el.addEventListener('click', (e) => {
 				_.currentIndex = index;
-				_.open();
+				open();
 			});
 		});
 	};
 
-	SkySlider.prototype.open = function() {
+	function open() {
 		_.overlay.classList.add('is-open');
-		_.close();
+		close();
 		initSliderWith();
-		_.changeActiveThumbnail();
+		changeActiveThumbnail();
 		moveBeltWithArrow();
 	}
 
 
-	SkySlider.prototype.close = function() {
+	function close() {
 		_.ulBelt.style.transition = '';
 		_.overlay.addEventListener('click', (e) => {
 			let target = e.target;
@@ -90,7 +86,7 @@
 		});
 	}
 
-	SkySlider.prototype.create = function() {
+	function create() {
 		_.overlay = document.createElement('div');
 		_.overlay.classList.add('skySlider-overlay');
 
@@ -100,16 +96,16 @@
 		_.overlay.appendChild(_.closeBtn);
 		// create Slider
 		//-------------------------------------------------------
-		_.overlay.appendChild(_.createSlider());
+		_.overlay.appendChild(createSlider());
 
 		// create Thumbnails
 		//--------------------------------------------------------
-		if (_.options.showThumbnails) _.overlay.appendChild(_.createThumbnails());
+		if (_.options.showThumbnails) _.overlay.appendChild(createThumbnails());
 
 		document.body.appendChild(_.overlay);
 	}
 
-	SkySlider.prototype.createSlider = function() {
+	function createSlider() {
 		_.sliderWrap = document.createElement('div');
 		_.sliderWrap.classList.add('skySlider-slider-wrap');
 
@@ -137,9 +133,6 @@
 		for (let i = 0; i < _.imagesUrl.length; i++) {
 			_.li = document.createElement('li');
 			_.li.classList.add('skySlider-slide')
-			// if (_.currentIndex === i) {
-			// 	_.li.classList.add('is-current');
-			// }
 			_.img = document.createElement('img');
 			_.img.setAttribute('src', _.imagesUrl[i]);
 			_.li.appendChild(_.img);
@@ -150,7 +143,7 @@
 	}
 
 
-	SkySlider.prototype.createThumbnails = function() {
+	function createThumbnails() {
 		_.thumbnailsWrap = document.createElement('div');
 		_.thumbnailsWrap.classList.add('skySlider-thumbnails-wrap');
 
@@ -173,7 +166,7 @@
 		return _.thumbnailsWrap;
 	}
 
-	SkySlider.prototype.thumbnailsActions = function() {
+	function thumbnailsActions() {
 		let thumbnails = _.thumbnailsList.children,
 			liWidth = _.li.offsetWidth;
 
@@ -195,7 +188,7 @@
 		});
 	}
 
-	SkySlider.prototype.changeActiveThumbnail = function() {
+	function changeActiveThumbnail() {
 		let thumbnails = _.thumbnailsList.children;
 
 		for (let i = 0; i < thumbnails.length; i++) {
@@ -204,7 +197,7 @@
 		}
 	}
 
-	SkySlider.prototype.moveThumbnailsBelt = function() {
+	function moveThumbnailsBelt() {
 		let self = _; // test
 
 		let thumbnails = _.thumbnailsList.children,
@@ -220,11 +213,10 @@
 		_.thumbnailsList.style.width = thumbnailsLength * thumbnailWidth + 'px';
 		_.thumbnailsList.style.transform = 'translate3d(0,0,0)';
 
-		// console.log(_.thumbnailsList.children[0].offsetWidth);
-
-
-		// for Mouse
-		//------------------------------------------------------
+		/**
+		 * for Mouse
+		 * ---------
+		 */
 		self.thumbnailsWrap.addEventListener('mousedown', (e) => {
 			e.preventDefault();
 
@@ -259,8 +251,10 @@
 		});
 
 
-		// for Touch
-		//------------------------------------------------------
+		/**
+		 * for Touch
+		 * ---------
+		 */
 		_.thumbnailsWrap.addEventListener('touchstart', (e) => {
 			e.preventDefault();
 
@@ -283,7 +277,6 @@
 				self.thumbnailsList.style.transform = `translate3d(${totalDist}px,0,0)`;
 			}
 		});
-
 	}
 
 	function initSliderWith() {
@@ -296,7 +289,7 @@
 		_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 	}
 
-	SkySlider.prototype.moveSlider = function() {
+	function moveSlider() {
 		let sliderWidth = _.slider.offsetWidth,
 			liElements = _.ulBelt.children,
 			liCount = liElements.length,
@@ -328,39 +321,19 @@
 			dir = (dist < 0) ? 'left' : 'right';
 
 			if (dist < -100 || dist > 100) {
-				// if (dir == 'right') {
-				// 	_.currentIndex--;
-				// 	if (_.currentIndex < 0) _.currentIndex = 0;
-				// 	// console.log(_.currentIndex);
-				// }
-				// if (dir == 'left') {
-				// 	_.currentIndex++;
-				// 	if (_.currentIndex == liCount) _.currentIndex = liCount-1;
-				// 	// console.log(_.currentIndex);
-				// }
-
-				// _.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-
-				// debugger
-
-				// debugger;
-
 				_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, liCount-1) : Math.max(_.currentIndex-1,0);
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 
-				// console.log(_.currentIndex);
-
-
-				if (_.options.showThumbnails) _.changeActiveThumbnail();
+				if (_.options.showThumbnails) changeActiveThumbnail();
 
 				moveBeltWithArrow();
-
 			}
 		});
 
 
 		/**
-		 * 	for Touch
+		 * for Touch
+		 * ---------
 		 */
 		_.slider.addEventListener('touchstart', (e) => {
 			e.preventDefault();
@@ -390,14 +363,14 @@
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 				dist = 0;
 
-				if (_.options.showThumbnails) _.changeActiveThumbnail();
+				if (_.options.showThumbnails) changeActiveThumbnail();
 
 				moveBeltWithArrow();
 			}
 		});
 	}
 
-	SkySlider.prototype.sliderArrows = function() {
+	function sliderArrows() {
 		let liLength = _.ulBelt.children.length,
 			liWidth = _.li.offsetWidth;
 
@@ -411,7 +384,7 @@
 
 			_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 
-			if (_.options.showThumbnails) _.changeActiveThumbnail();
+			if (_.options.showThumbnails) changeActiveThumbnail();
 
 			moveBeltWithArrow();
 		});
@@ -426,7 +399,7 @@
 
 			_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 
-			if (_.options.showThumbnails) _.changeActiveThumbnail();
+			if (_.options.showThumbnails) changeActiveThumbnail();
 
 			moveBeltWithArrow();
 		});
@@ -454,34 +427,30 @@
 		}
 	}
 
-	SkySlider.prototype.keyboardNavigation = function() {
+	function keyboardNavigation() {
 		let body = document.querySelector('body');
 		let	liLength = _.ulBelt.children.length,
 			liWidth = _.li.offsetWidth;
 
-		// console.info('Current index: ' + _.currentIndex);
 
 		body.addEventListener('keyup', (e) => {
 			if (e.keyCode == 37) {
 				_.ulBelt.style.transition = 'all 300ms ease-out';
 				_.currentIndex--;
-				// console.log('Left: ' + _.currentIndex);
 
 				if (_.currentIndex <= 0) _.currentIndex = 0;
 
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-				if (_.options.showThumbnails) _.changeActiveThumbnail();
+				if (_.options.showThumbnails) changeActiveThumbnail();
 			}
 			if (e.keyCode == 39) {
 				_.currentIndex++;
 				_.ulBelt.style.transition = 'all 300ms ease-out';
 
-				// console.log('Right: ' + _.currentIndex);
-
 				if (_.currentIndex == liLength) _.currentIndex = liLength-1;
 
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-				if (_.options.showThumbnails) _.changeActiveThumbnail();
+				if (_.options.showThumbnails) changeActiveThumbnail();
 			}
 		});
 	}
@@ -539,4 +508,3 @@ let modal = new SkySlider({
 });
 
 
-// let modal = new SkySlider();
