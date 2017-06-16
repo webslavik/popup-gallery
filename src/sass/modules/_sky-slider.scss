@@ -32,10 +32,20 @@
     right: 24px;
     cursor: pointer;
 
+    // background: tomato;
+    // transition: all 0.2s;
+
+    &:hover {
+        svg {
+            transform: rotate(90deg);
+        }
+    }
+
     svg {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
         fill: #ffffff;
+        transition: all 0.2s ease-out;
     }
 }
 
@@ -60,8 +70,8 @@
     cursor: pointer;
 
     svg {
-        width: 48px;
-        height: 48px;
+        width: 40px;
+        height: 40px;
         fill: #ffffff;
     }
 

@@ -4,7 +4,6 @@
 
 	let _; // for `this`
 
-
 	function SkySlider() {
 
 		_ = this;
@@ -16,7 +15,7 @@
 		_.currentIndex;
 		_.prevArrow = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250.738 250.738"><path d="M96.633 125.37l95.053-94.534c7.1-7.055 7.1-18.492 0-25.546-7.1-7.054-18.613-7.054-25.714 0L58.99 111.69c-3.785 3.758-5.488 8.758-5.24 13.68-.248 4.92 1.455 9.92 5.24 13.68L165.97 245.448c7.1 7.055 18.613 7.055 25.714 0 7.1-7.054 7.1-18.49 0-25.544L96.633 125.37z" fill-rule="evenodd" clip-rule="evenodd"/></svg>';
 		_.nextArrow = '<svg xmlns="http://www.w3.org/2000/svg" width="451.846" height="451.847" viewBox="0 0 451.846 451.847"><path d="M345.44 248.292l-194.286 194.28c-12.36 12.366-32.397 12.366-44.75 0-12.354-12.353-12.354-32.39 0-44.743l171.914-171.91-171.91-171.903c-12.353-12.36-12.353-32.394 0-44.748 12.355-12.36 32.392-12.36 44.75 0l194.288 194.283c6.177 6.18 9.262 14.27 9.262 22.366 0 8.098-3.09 16.195-9.267 22.372z"/></svg>';
-		_.crossIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212.982 212.982"><path d="M131.804 106.49l75.936-75.935c6.99-6.99 6.99-18.323 0-25.312-6.99-6.99-18.322-6.99-25.312 0L106.49 81.18 30.555 5.242c-6.99-6.99-18.322-6.99-25.312 0-6.99 6.99-6.99 18.323 0 25.312L81.18 106.49 5.24 182.427c-6.99 6.99-6.99 18.323 0 25.312 6.99 6.99 18.322 6.99 25.312 0L106.49 131.8l75.938 75.937c6.99 6.99 18.322 6.99 25.312 0 6.99-6.99 6.99-18.323 0-25.313l-75.936-75.936z" fill-rule="evenodd" clip-rule="evenodd"/></svg>';
+		_.crossIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M437.02 74.98C388.666 26.63 324.38 0 256 0S123.333 26.63 74.98 74.98 0 187.62 0 256s26.63 132.667 74.98 181.02C123.333 485.37 187.62 512 256 512s132.667-26.63 181.02-74.98C485.37 388.666 512 324.38 512 256s-26.63-132.668-74.98-181.02zM256 470.637C137.65 470.636 41.364 374.35 41.364 256S137.65 41.364 256 41.364 470.636 137.65 470.636 256 374.35 470.636 256 470.636z"/><path d="M341.22 170.78c-8.077-8.076-21.172-8.076-29.25 0L170.78 311.97c-8.077 8.078-8.077 21.173 0 29.25 4.038 4.04 9.332 6.058 14.625 6.058s10.587-2.02 14.625-6.058l141.19-141.19c8.076-8.077 8.076-21.172 0-29.25z"/><path d="M341.22 311.97L200.03 170.78c-8.077-8.076-21.173-8.076-29.25 0-8.076 8.077-8.076 21.172 0 29.25l141.19 141.19a20.616 20.616 0 0 0 14.626 6.058c5.293 0 10.586-2.02 14.625-6.058 8.076-8.077 8.076-21.172 0-29.25z"/></svg>';
 		
 
 		/**
@@ -79,14 +78,27 @@
 		_.overlay.addEventListener('click', (e) => {
 			let target = e.target;
 
-			if (target.parentElement.parentElement.classList.contains('skySlider-close')) {
+			/**
+			 * refactoring
+			 * -----------
+			 * need optimize
+			 */
+			// if (target.classList.contains('skySlider-close') || target.classList.contains('skySlider-slider-wrap') || target.tagName == 'path' || target.tagName == 'svg') {
+			// 	_.overlay.classList.remove('is-open');
+			// }
+
+			if (target.classList.contains('skySlider-close') || target.classList.contains('skySlider-slider-wrap')) {
 				_.overlay.classList.remove('is-open');
 			}
 			
 			if (!target.classList.contains('skySlider-overlay')) {
 				return false;
 			}
+			_.overlay.classList.remove('is-open');
 
+		});
+
+		document.querySelector('.skySlider-close').addEventListener('click', function(e) {
 			_.overlay.classList.remove('is-open');
 		});
 	}
@@ -524,5 +536,3 @@ let modal = new SkySlider({
 	thumbnailsItemCount: 7,
 	showThumbnails: true
 });
-
-
