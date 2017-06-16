@@ -189,6 +189,8 @@
 				_.currentIndex = index;
 				_.ulBelt.style.transition = 'all 300ms ease-out';
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
+
+				moveBeltWithArrow();
 			});
 		});
 	}
@@ -519,7 +521,7 @@
 
 
 let modal = new SkySlider({
-	thumbnailsItemCount: 8,
+	thumbnailsItemCount: 7,
 	showThumbnails: true
 });
 
