@@ -1,6 +1,8 @@
 .skySlider-overlay {
     width: 100%;
     height: 100%;
+    padding: 0 15px;
+
     position: fixed;
     top: 0;
     left: 0;
@@ -38,7 +40,6 @@
 // Big Images
 //---------------------------------------
 .skySlider-slider-wrap {
-    // width: 500px;
     position: absolute;
     top: 40%;
     left: 50%;
@@ -70,6 +71,8 @@
 
 .skySlider-slider {
     width: 500px;
+    // max-width: 600px;
+    // width: 100%;
     overflow: hidden;
 }
 

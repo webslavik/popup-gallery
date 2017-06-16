@@ -50,6 +50,8 @@
 		if (_.options.showThumbnails) {
 			moveThumbnailsBelt();
 			thumbnailsActions();
+			// changeActiveThumbnail();
+			// moveBeltWithArrow();
 		}
 
 		Array.from(children, (el, index) => {
@@ -64,8 +66,11 @@
 		_.overlay.classList.add('is-open');
 		close();
 		initSliderWith();
-		changeActiveThumbnail();
-		moveBeltWithArrow();
+
+		if (_.options.showThumbnails) {
+			changeActiveThumbnail();
+			moveBeltWithArrow();
+		}
 	}
 
 
@@ -324,9 +329,10 @@
 				_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, liCount-1) : Math.max(_.currentIndex-1,0);
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 
-				if (_.options.showThumbnails) changeActiveThumbnail();
-
-				moveBeltWithArrow();
+				if (_.options.showThumbnails) {
+					changeActiveThumbnail();
+					moveBeltWithArrow();
+				}
 			}
 		});
 
@@ -363,9 +369,10 @@
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 				dist = 0;
 
-				if (_.options.showThumbnails) changeActiveThumbnail();
-
-				moveBeltWithArrow();
+				if (_.options.showThumbnails) {
+					changeActiveThumbnail();
+					moveBeltWithArrow();
+				}
 			}
 		});
 	}
@@ -384,9 +391,10 @@
 
 			_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 
-			if (_.options.showThumbnails) changeActiveThumbnail();
-
-			moveBeltWithArrow();
+			if (_.options.showThumbnails) {
+				changeActiveThumbnail();
+				moveBeltWithArrow();
+			}
 		});
 
 		_.next.addEventListener('click', () => {
@@ -399,9 +407,10 @@
 
 			_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 
-			if (_.options.showThumbnails) changeActiveThumbnail();
-
-			moveBeltWithArrow();
+			if (_.options.showThumbnails) {
+				changeActiveThumbnail();
+				moveBeltWithArrow();
+			}
 		});
 	}
 
@@ -441,8 +450,10 @@
 				if (_.currentIndex <= 0) _.currentIndex = 0;
 
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-				if (_.options.showThumbnails) changeActiveThumbnail();
-				moveBeltWithArrow();
+				if (_.options.showThumbnails) {
+					changeActiveThumbnail();
+					moveBeltWithArrow();
+				}
 			}
 			if (e.keyCode == 39) {
 				_.currentIndex++;
@@ -451,8 +462,10 @@
 				if (_.currentIndex == liLength) _.currentIndex = liLength-1;
 
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-				if (_.options.showThumbnails) changeActiveThumbnail();
-				moveBeltWithArrow();
+				if (_.options.showThumbnails) {
+					changeActiveThumbnail();
+					moveBeltWithArrow();
+				}
 			}
 		});
 	}
@@ -507,7 +520,7 @@
 
 let modal = new SkySlider({
 	thumbnailsItemCount: 5,
-	showThumbnails: true
+	showThumbnails: false
 });
 
 
