@@ -798,9 +798,25 @@ p {
 }
 
 .skySlider-overlay {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
-  padding: 0 15px;
   position: fixed;
   top: 0;
   left: 0;
@@ -839,16 +855,24 @@ p {
 }
 
 .skySlider-slider-wrap {
-  position: absolute;
-  top: 40%;
-  left: 50%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 16px;
   -webkit-transition: 1ms opacity ease;
   -o-transition: 1ms opacity ease;
   transition: 1ms opacity ease;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  z-index: 9999;
 }
 
 .skySlider-arrow {
@@ -867,38 +891,45 @@ p {
 }
 
 .skySlider-arrow.next {
-  right: -80px;
+  right: 32px;
 }
 
 .skySlider-arrow.prev {
-  left: -80px;
+  left: 32px;
 }
 
 .skySlider-slider {
-  width: 500px;
+  max-width: 600px;
+  width: 100%;
+  height: 80%;
   overflow: hidden;
+  position: relative;
 }
 
 .skySlider-slider-belt {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 1100%;
+  height: 100%;
+  text-align: center;
   cursor: pointer;
-  background-color: #222;
 }
 
 .skySlider-slide {
-  float: left;
-  width: 500px;
+  width: 100%;
+  height: 100%;
+}
+
+.skySlider-slide img {
+  height: 100%;
 }
 
 .skySlider-thumbnails-wrap {
   padding: 16px 0;
-  position: absolute;
-  bottom: 2%;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
-  z-index: 9999;
   overflow: hidden;
+  padding-bottom: 32px;
 }
 
 .skySlider-thumbnails-list {
@@ -973,5 +1004,24 @@ p {
 
   .photos-list li:nth-child(1n) {
     margin-right: 0px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .skySlider-thumbnails-wrap {
+    display: none;
+  }
+
+  .skySlider-arrow svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .skySlider-arrow.next {
+    right: 0;
+  }
+
+  .skySlider-arrow.prev {
+    left: 0;
   }
 }
