@@ -4,12 +4,13 @@
 
 	let _; // for `this`
 
+
 	function SkySlider() {
 
 		_ = this;
 
 		/**
-		 * Defaults properties
+		 * Private properties
 		 * -------------------
 		 */
 		_.currentIndex;
@@ -27,7 +28,6 @@
 			thumbnailsItemCount: 5,
 			showThumbnails: true
 		};
-
 
 
 		if (arguments[0] && typeof arguments[0] === 'object') {
@@ -442,6 +442,7 @@
 
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 				if (_.options.showThumbnails) changeActiveThumbnail();
+				moveBeltWithArrow();
 			}
 			if (e.keyCode == 39) {
 				_.currentIndex++;
@@ -451,6 +452,7 @@
 
 				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
 				if (_.options.showThumbnails) changeActiveThumbnail();
+				moveBeltWithArrow();
 			}
 		});
 	}
@@ -470,6 +472,7 @@
 
 	// extend property
 	//--------------------------------------------
+
 	function extendDefaults(source, properties) {
 		for (let property in properties) {
 			if (properties.hasOwnProperty(property)) {
