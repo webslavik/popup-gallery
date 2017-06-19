@@ -31,7 +31,7 @@ gulp.task('pug', function() {
 
 
 gulp.task('sass', function() {
-	return gulp.src('src/sass/*.sass')
+	return gulp.src('src/sass/*.scss')
 		.pipe(sass()).pipe(sass())
 		.on('error', notify.onError(function(err) {
 			return {
@@ -71,7 +71,7 @@ gulp.task('build', ['clean', 'sass'], function() {
         }))
 		.pipe(gulp.dest('dist/'));
 
-	let buildStyle = gulp.src('src/sass/modules/sky-slider.scss')
+	let buildStyle = gulp.src('src/sass/skyslider.scss')
 		.pipe(sass())
 		.pipe(autoprefixer(['last 15 versions', '> 1%', 'ie 8', 'ie 7'], { cascade: true }))
 		.pipe(gulp.dest('dist/'));
