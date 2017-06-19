@@ -144,13 +144,20 @@ img {
 
 .skySlider-thumbnail {
     width: 115px;
+    height: 100px;
     padding: 0 8px;
     transition: all 200ms ease-out;
     transform: translateY(0);
     cursor: pointer;
+    overflow: hidden;
 
     &.is-current {
         transform: translateY(-15px);
+    }
+
+    img {
+        width: 115px;
+        height: 100px;
     }
 }
 
@@ -160,10 +167,23 @@ img {
         display: none;
     }
 
+    .skySlider-close {
+        top: 24px;
+
+        svg {
+            width: 48px;
+            height: 48px;
+        }
+    }
+
+    .skySlider-slider {
+        height: 60%;
+    }
+
     .skySlider-arrow {
         svg {
-            width: 24px;
-            height: 24px;
+            width: 32px;
+            height: 32px;
         }
 
         &.next {
@@ -173,4 +193,82 @@ img {
             left: 0;
         }
     }
+
+
 }
+
+
+
+// for iPod
+//---------------------------------------
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px)
+and (-webkit-min-device-pixel-ratio: 1) { 
+    .skySlider-slider-wrap {
+        height: 60%;
+    }
+
+    .skySlider-close {
+        top: 32px;
+        right: 32px;
+
+        svg {
+            width: 64px;
+            height: 64px;
+        }
+    }
+
+    .skySlider-slider {
+        height: 60%;
+    }
+
+    .skySlider-arrow {
+        top: calc(43% - 28px);
+
+        svg {
+            width: 48px;
+            height: 48px;
+        }
+        
+        &.next {
+            right: 8px;
+        }
+        &.prev {
+            left: 8px;
+        }
+    }
+
+}
+
+// for iPhone 6 Plus
+//---------------------------------------
+@media only screen 
+and (min-device-width : 414px) 
+and (max-device-width : 736px) {
+    .skySlider-slider {
+        height: 35%;
+    }
+}
+
+
+// for iPhone 6
+//---------------------------------------
+@media only screen 
+and (min-device-width : 375px) 
+and (max-device-width : 667px) {
+    .skySlider-slider {
+        height: 40%;
+    }    
+}
+
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) { 
+    .skySlider-slider {
+        height: 50%;
+    }
+}
+
+
+
