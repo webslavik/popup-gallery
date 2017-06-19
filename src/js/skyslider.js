@@ -1,8 +1,18 @@
+/**
+ * SkySlider
+ * ---------
+ * Version: 1.0.0
+ * Repo: https://github.com/webslavik/popup-gallery/tree/master
+ * Author: Slavik Sukhanov 
+ */
+
+
 'use strict';
 
 ;(function() {
 
-	let _; // for `this`
+	// for `this`
+	let _; 
 
 	function SkySlider() {
 
@@ -485,8 +495,11 @@
 	}
 	
 
-	// get images url
-	//--------------------------------------------
+	/**
+	 * Get images url
+	 * 
+	 * @param {Nodes} imagesEl
+	 */
 	function getImagesUrl(imagesEl) {
 		let imagesUrl = [];
 
@@ -497,20 +510,31 @@
 	}
 
 
-	// extend property
-	//--------------------------------------------
-
+	/**
+	 * Extend property
+	 * 
+	 * @param {object} source -  _.options
+	 * @param {object} properties - arguments[0]
+	 */
 	function extendDefaults(source, properties) {
 		for (let property in properties) {
 			if (properties.hasOwnProperty(property)) {
+				if (property === 'thumbnailsItemCount') {
+					if (properties[property] < 3) source[property] = properties[property] = 3;
+					if (properties[property] > 8) source[property] = properties[property] = 8;
+				}
 				source[property] = properties[property];
 			}
 		}
 		return source;
 	}
 
-	// get translate3d value
-	//--------------------------------------------
+
+	/**
+	 * Get translate3d value
+	 * 
+	 * @param {Node} el
+	 */
 	function getTransformValue(el) {
 		let transform = el.style.transform;
 		let xyzArray = transform.replace(/translate3d|px|\(|\)/gi, '').split(',');
@@ -518,16 +542,22 @@
 	}
 
 
-	// set Events
-	//--------------------------------------------
-	function addListenerMulti(el, s, fn) {
-		s.split(' ').forEach(e => el.addEventListener(e, fn, false));
+	/**
+	 * Set events for several elements
+	 * 
+	 * @param {Node} el 
+	 * @param {Events} events
+	 * @param {Callback} fn 
+	 */
+	function addListenerMulti(el, events, fn) {
+		events.split(' ').forEach(e => el.addEventListener(e, fn, false));
 	}
 
-	// init Module
-	//--------------------------------------------
-	window.SkySlider = SkySlider;
 
+	/**
+	 * init Module
+	 */
+	window.SkySlider = SkySlider;
 })()
 
 
