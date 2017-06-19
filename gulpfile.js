@@ -1,17 +1,17 @@
 'use strict';
 
-const gulp 						= require('gulp'),
-			pug 						= require('gulp-pug'),
-			sass            = require('gulp-sass'),
-			autoprefixer    = require('gulp-autoprefixer'),
-			cleanCSS        = require('gulp-clean-css'), // минификация css
-			gcmq 						= require('gulp-group-css-media-queries'), // объединение media queries
-			uglify          = require('gulp-uglify'), // минифицируем js
-			notify          = require("gulp-notify"), // выводим ошибки
-			gulpif 					= require('gulp-if'),
-			useref 					= require('gulp-useref'),
-			del             = require('del'),
-			browserSync     = require('browser-sync');
+const gulp = require('gulp'),
+	  pug = require('gulp-pug'),
+	  sass = require('gulp-sass'),
+	  autoprefixer = require('gulp-autoprefixer'),
+	  cleanCSS = require('gulp-clean-css'),
+	  gcmq = require('gulp-group-css-media-queries'),
+	  uglify = require('gulp-uglify'), // minify js
+	  babel = require('gulp-babel'),
+	  rename = require('gulp-rename'),
+	  notify = require("gulp-notify"), // show errors
+	  del = require('del'),
+	  browserSync = require('browser-sync');
 
 
 
@@ -31,8 +31,8 @@ gulp.task('pug', function() {
 
 
 gulp.task('sass', function() {
-	return gulp.src('src/sass/*.sass')
-		.pipe(sass())
+	return gulp.src('src/sass/*.scss')
+		.pipe(sass()).pipe(sass())
 		.on('error', notify.onError(function(err) {
 			return {
 				title: 'Sass',
@@ -62,12 +62,19 @@ gulp.task('clean', function() {
 });
 
 
-gulp.task('build', ['clean', 'sass', 'pug'], function() {
-		var buildHTML = gulp.src('src/*.html')
-			.pipe(useref())
-			// .pipe(gulpif('*.js', uglify()))
-			.pipe(gulpif('*.css', cleanCSS()))
-			.pipe(gulp.dest('dist/'));
+gulp.task('build', ['clean', 'sass'], function() {
+	let buildJS = gulp.src('src/js/*.js')
+		.pipe(babel({presets: ['es2015']}))
+		.pipe(uglify())
+		.pipe(rename({
+            suffix: '.min'
+        }))
+		.pipe(gulp.dest('dist/'));
+
+	let buildStyle = gulp.src('src/sass/skyslider.scss')
+		.pipe(sass())
+		.pipe(autoprefixer(['last 15 versions', '> 1%', 'ie 8', 'ie 7'], { cascade: true }))
+		.pipe(gulp.dest('dist/'));
 });
 
 

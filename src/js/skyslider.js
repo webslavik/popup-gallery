@@ -12,7 +12,8 @@
 		 * Private properties
 		 * -------------------
 		 */
-		_.currentIndex;
+		_.currentIndex = null;
+		_.sliderWidth = null;
 		_.prevArrow = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250.738 250.738"><path d="M96.633 125.37l95.053-94.534c7.1-7.055 7.1-18.492 0-25.546-7.1-7.054-18.613-7.054-25.714 0L58.99 111.69c-3.785 3.758-5.488 8.758-5.24 13.68-.248 4.92 1.455 9.92 5.24 13.68L165.97 245.448c7.1 7.055 18.613 7.055 25.714 0 7.1-7.054 7.1-18.49 0-25.544L96.633 125.37z" fill-rule="evenodd" clip-rule="evenodd"/></svg>';
 		_.nextArrow = '<svg xmlns="http://www.w3.org/2000/svg" width="451.846" height="451.847" viewBox="0 0 451.846 451.847"><path d="M345.44 248.292l-194.286 194.28c-12.36 12.366-32.397 12.366-44.75 0-12.354-12.353-12.354-32.39 0-44.743l171.914-171.91-171.91-171.903c-12.353-12.36-12.353-32.394 0-44.748 12.355-12.36 32.392-12.36 44.75 0l194.288 194.283c6.177 6.18 9.262 14.27 9.262 22.366 0 8.098-3.09 16.195-9.267 22.372z"/></svg>';
 		_.crossIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M437.02 74.98C388.666 26.63 324.38 0 256 0S123.333 26.63 74.98 74.98 0 187.62 0 256s26.63 132.667 74.98 181.02C123.333 485.37 187.62 512 256 512s132.667-26.63 181.02-74.98C485.37 388.666 512 324.38 512 256s-26.63-132.668-74.98-181.02zM256 470.637C137.65 470.636 41.364 374.35 41.364 256S137.65 41.364 256 41.364 470.636 137.65 470.636 256 374.35 470.636 256 470.636z"/><path d="M341.22 170.78c-8.077-8.076-21.172-8.076-29.25 0L170.78 311.97c-8.077 8.078-8.077 21.173 0 29.25 4.038 4.04 9.332 6.058 14.625 6.058s10.587-2.02 14.625-6.058l141.19-141.19c8.076-8.077 8.076-21.172 0-29.25z"/><path d="M341.22 311.97L200.03 170.78c-8.077-8.076-21.173-8.076-29.25 0-8.076 8.077-8.076 21.172 0 29.25l141.19 141.19a20.616 20.616 0 0 0 14.626 6.058c5.293 0 10.586-2.02 14.625-6.058 8.076-8.077 8.076-21.172 0-29.25z"/></svg>';
@@ -74,7 +75,7 @@
 
 
 	function close() {
-		_.ulBelt.style.transition = '';
+		_.sliderBelt.style.transition = '';
 		_.overlay.addEventListener('click', (e) => {
 			let target = e.target;
 
@@ -142,9 +143,9 @@
 		_.slider.classList.add('skySlider-slider');
 		_.sliderWrap.appendChild(_.slider);
 
-		_.ulBelt = document.createElement('ul');
-		_.ulBelt.classList.add('skySlider-slider-belt');
-		_.slider.appendChild(_.ulBelt);
+		_.sliderBelt = document.createElement('ul');
+		_.sliderBelt.classList.add('skySlider-slider-belt');
+		_.slider.appendChild(_.sliderBelt);
 
 
 		for (let i = 0; i < _.imagesUrl.length; i++) {
@@ -153,7 +154,7 @@
 			_.img = document.createElement('img');
 			_.img.setAttribute('src', _.imagesUrl[i]);
 			_.li.appendChild(_.img);
-			_.ulBelt.appendChild(_.li)
+			_.sliderBelt.appendChild(_.li)
 		}
 
 		return _.sliderWrap;
@@ -183,6 +184,191 @@
 		return _.thumbnailsWrap;
 	}
 
+
+	function initSliderWith() { 
+		_.sliderWidth = _.slider.offsetWidth;
+
+		_.sliderBelt.style.width = `${_.sliderWidth * _.sliderBelt.children.length}px`;
+		_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
+	}
+
+	function moveSlider() {
+		let sliderWidth = _.slider.offsetWidth,
+			liElements = _.sliderBelt.children,
+			liCount = liElements.length,
+			liWidth = liElements[0].offsetWidth,
+			beltOffset,
+			start,
+			dist,
+			dir,
+			allowedTime = 400,
+			startTime,
+			elepsedTime;
+
+
+		/**
+		 * 	for Mouse
+		 */
+		_.slider.addEventListener('mousedown', (e) => {
+			e.preventDefault();
+
+			_.sliderBelt.style.transition = 'all 300ms ease-out';
+			beltOffset = parseInt(getTransformValue(_.sliderBelt));
+			start = e.pageX;
+		});
+
+		_.slider.addEventListener('mouseup', (e) => {
+			e.stopPropagation();
+
+			dist = e.pageX - start;
+			dir = (dist < 0) ? 'left' : 'right';
+
+			if (dist < -100 || dist > 100) {
+				_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, liCount-1) : Math.max(_.currentIndex-1,0);
+				_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
+
+				if (_.options.showThumbnails) {
+					changeActiveThumbnail();
+					moveBeltWithArrow();
+				}
+			}
+		});
+
+
+		/**
+		 * for Touch
+		 * ---------
+		 */
+		_.slider.addEventListener('touchstart', (e) => {
+			e.preventDefault();
+
+			_.sliderBelt.style.transition = 'all 300ms ease-out';
+			beltOffset = parseInt(getTransformValue(_.sliderBelt));
+			let touchObj = e.changedTouches[0];
+			start = touchObj.pageX;
+			startTime = new Date().getTime();
+		});
+
+		_.slider.addEventListener('touchmove', (e) => {
+			e.preventDefault();
+
+			let touchObj = e.changedTouches[0]
+			dist = touchObj.pageX - start;
+			dir = (dist < 0) ? 'left' : 'right';
+		});
+
+		_.slider.addEventListener('touchend', (e) => {
+			e.preventDefault();
+
+			elepsedTime = new Date().getTime() - startTime;
+
+			if (elepsedTime < allowedTime && (dist < -150 || dist > 150)) {
+				_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, liCount-1) : Math.max(_.currentIndex-1, 0);
+				_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
+				dist = 0;
+
+				if (_.options.showThumbnails) {
+					changeActiveThumbnail();
+					moveBeltWithArrow();
+				}
+			}
+		});
+	}
+
+	function sliderArrows() {
+		let liLength = _.sliderBelt.children.length,
+			liWidth = _.li.offsetWidth;
+
+		_.prev.addEventListener('click', () => {
+			_.currentIndex--;
+			_.sliderBelt.style.transition = 'all 300ms ease-out';
+
+			if (_.currentIndex < 0) {
+				_.currentIndex = 0;
+			}
+
+			_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
+
+			if (_.options.showThumbnails) {
+				changeActiveThumbnail();
+				moveBeltWithArrow();
+			}
+		});
+
+		_.next.addEventListener('click', () => {
+			_.currentIndex++;
+			_.sliderBelt.style.transition = 'all 300ms ease-out';
+
+			if (_.currentIndex == liLength) {
+				_.currentIndex = liLength-1;
+			}
+
+			_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
+
+			if (_.options.showThumbnails) {
+				changeActiveThumbnail();
+				moveBeltWithArrow();
+			}
+		});
+	}
+
+	function moveBeltWithArrow() {
+		let thumbnails = _.thumbnailsList.children,
+			thumbnailWidth = thumbnails[0].offsetWidth;
+
+		let offset = _.currentIndex - (Math.floor(_.options.thumbnailsItemCount / 2));
+
+		/**
+		 * rewrite!!!
+		 * -----------
+		 * correctly work only: _.options.thumbnailsItemCount = 5
+		 */
+		if (offset >= 0 && offset <= (thumbnails.length - _.options.thumbnailsItemCount)) {
+			_.thumbnailsList.style.transform = `translate3d(-${offset * thumbnailWidth}px,0,0)`;
+		}
+		if (_.currentIndex == 0 || _.currentIndex == 1) {
+			_.thumbnailsList.style.transform = `translate3d(-0,0,0)`;
+		}
+		if (_.currentIndex == (thumbnails.length - 1) || _.currentIndex == (thumbnails.length - 2)) {
+			_.thumbnailsList.style.transform = `translate3d(-${(thumbnails.length - _.options.thumbnailsItemCount) * thumbnailWidth}px,0,0)`;
+		}
+	}
+
+	function keyboardNavigation() {
+		let body = document.querySelector('body');
+		let	liLength = _.sliderBelt.children.length,
+			liWidth = _.li.offsetWidth;
+
+
+		body.addEventListener('keyup', (e) => {
+			if (e.keyCode == 37) {
+				_.sliderBelt.style.transition = 'all 300ms ease-out';
+				_.currentIndex--;
+
+				if (_.currentIndex <= 0) _.currentIndex = 0;
+
+				_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
+				if (_.options.showThumbnails) {
+					changeActiveThumbnail();
+					moveBeltWithArrow();
+				}
+			}
+			if (e.keyCode == 39) {
+				_.currentIndex++;
+				_.sliderBelt.style.transition = 'all 300ms ease-out';
+
+				if (_.currentIndex == liLength) _.currentIndex = liLength-1;
+
+				_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
+				if (_.options.showThumbnails) {
+					changeActiveThumbnail();
+					moveBeltWithArrow();
+				}
+			}
+		});
+	}
+
+
 	function thumbnailsActions() {
 		let thumbnails = _.thumbnailsList.children,
 			liWidth = _.li.offsetWidth;
@@ -199,8 +385,8 @@
 				el.classList.add('is-current');
 
 				_.currentIndex = index;
-				_.ulBelt.style.transition = 'all 300ms ease-out';
-				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
+				_.sliderBelt.style.transition = 'all 300ms ease-out';
+				_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
 
 				moveBeltWithArrow();
 			});
@@ -297,193 +483,7 @@
 			}
 		});
 	}
-
-	function initSliderWith() {
-		let sliderWidth = _.slider.offsetWidth,
-			liElements = _.ulBelt.children,
-			liCount = liElements.length,
-			liWidth = liElements[0].offsetWidth;
-
-		_.ulBelt.style.width = `${liWidth * liCount}px`;
-		_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-	}
-
-	function moveSlider() {
-		let sliderWidth = _.slider.offsetWidth,
-			liElements = _.ulBelt.children,
-			liCount = liElements.length,
-			liWidth = liElements[0].offsetWidth,
-			beltOffset,
-			start,
-			dist,
-			dir,
-			allowedTime = 400,
-			startTime,
-			elepsedTime;
-
-
-		/**
-		 * 	for Mouse
-		 */
-		_.slider.addEventListener('mousedown', (e) => {
-			e.preventDefault();
-
-			_.ulBelt.style.transition = 'all 300ms ease-out';
-			beltOffset = parseInt(getTransformValue(_.ulBelt));
-			start = e.pageX;
-		});
-
-		_.slider.addEventListener('mouseup', (e) => {
-			e.stopPropagation();
-
-			dist = e.pageX - start;
-			dir = (dist < 0) ? 'left' : 'right';
-
-			if (dist < -100 || dist > 100) {
-				_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, liCount-1) : Math.max(_.currentIndex-1,0);
-				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-
-				if (_.options.showThumbnails) {
-					changeActiveThumbnail();
-					moveBeltWithArrow();
-				}
-			}
-		});
-
-
-		/**
-		 * for Touch
-		 * ---------
-		 */
-		_.slider.addEventListener('touchstart', (e) => {
-			e.preventDefault();
-
-			_.ulBelt.style.transition = 'all 300ms ease-out';
-			beltOffset = parseInt(getTransformValue(_.ulBelt));
-			let touchObj = e.changedTouches[0];
-			start = touchObj.pageX;
-			startTime = new Date().getTime();
-		});
-
-		_.slider.addEventListener('touchmove', (e) => {
-			e.preventDefault();
-
-			let touchObj = e.changedTouches[0]
-			dist = touchObj.pageX - start;
-			dir = (dist < 0) ? 'left' : 'right';
-		});
-
-		_.slider.addEventListener('touchend', (e) => {
-			e.preventDefault();
-
-			elepsedTime = new Date().getTime() - startTime;
-
-			if (elepsedTime < allowedTime && (dist < -150 || dist > 150)) {
-				_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, liCount-1) : Math.max(_.currentIndex-1, 0);
-				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-				dist = 0;
-
-				if (_.options.showThumbnails) {
-					changeActiveThumbnail();
-					moveBeltWithArrow();
-				}
-			}
-		});
-	}
-
-	function sliderArrows() {
-		let liLength = _.ulBelt.children.length,
-			liWidth = _.li.offsetWidth;
-
-		_.prev.addEventListener('click', () => {
-			_.currentIndex--;
-			_.ulBelt.style.transition = 'all 300ms ease-out';
-
-			if (_.currentIndex < 0) {
-				_.currentIndex = 0;
-			}
-
-			_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-
-			if (_.options.showThumbnails) {
-				changeActiveThumbnail();
-				moveBeltWithArrow();
-			}
-		});
-
-		_.next.addEventListener('click', () => {
-			_.currentIndex++;
-			_.ulBelt.style.transition = 'all 300ms ease-out';
-
-			if (_.currentIndex == liLength) {
-				_.currentIndex = liLength-1;
-			}
-
-			_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-
-			if (_.options.showThumbnails) {
-				changeActiveThumbnail();
-				moveBeltWithArrow();
-			}
-		});
-	}
-
-	function moveBeltWithArrow() {
-		let thumbnails = _.thumbnailsList.children,
-			thumbnailWidth = thumbnails[0].offsetWidth;
-
-		let offset = _.currentIndex - (Math.floor(_.options.thumbnailsItemCount / 2));
-
-		/**
-		 * rewrite!!!
-		 * -----------
-		 * correctly work only: _.options.thumbnailsItemCount = 5
-		 */
-		if (offset >= 0 && offset <= (thumbnails.length - _.options.thumbnailsItemCount)) {
-			_.thumbnailsList.style.transform = `translate3d(-${offset * thumbnailWidth}px,0,0)`;
-		}
-		if (_.currentIndex == 0 || _.currentIndex == 1) {
-			_.thumbnailsList.style.transform = `translate3d(-0,0,0)`;
-		}
-		if (_.currentIndex == (thumbnails.length - 1) || _.currentIndex == (thumbnails.length - 2)) {
-			_.thumbnailsList.style.transform = `translate3d(-${(thumbnails.length - _.options.thumbnailsItemCount) * thumbnailWidth}px,0,0)`;
-		}
-	}
-
-	function keyboardNavigation() {
-		let body = document.querySelector('body');
-		let	liLength = _.ulBelt.children.length,
-			liWidth = _.li.offsetWidth;
-
-
-		body.addEventListener('keyup', (e) => {
-			if (e.keyCode == 37) {
-				_.ulBelt.style.transition = 'all 300ms ease-out';
-				_.currentIndex--;
-
-				if (_.currentIndex <= 0) _.currentIndex = 0;
-
-				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-				if (_.options.showThumbnails) {
-					changeActiveThumbnail();
-					moveBeltWithArrow();
-				}
-			}
-			if (e.keyCode == 39) {
-				_.currentIndex++;
-				_.ulBelt.style.transition = 'all 300ms ease-out';
-
-				if (_.currentIndex == liLength) _.currentIndex = liLength-1;
-
-				_.ulBelt.style.transform = `translate3d(-${_.currentIndex * liWidth}px,0,0)`;
-				if (_.options.showThumbnails) {
-					changeActiveThumbnail();
-					moveBeltWithArrow();
-				}
-			}
-		});
-	}
-
+	
 
 	// get images url
 	//--------------------------------------------
@@ -533,6 +533,6 @@
 
 
 let modal = new SkySlider({
-	thumbnailsItemCount: 7,
+	thumbnailsItemCount: 5,
 	showThumbnails: true
 });
