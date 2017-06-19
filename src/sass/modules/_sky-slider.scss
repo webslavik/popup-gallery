@@ -1,3 +1,7 @@
+img {
+    max-width: 100%;
+}
+
 .skySlider-overlay {
     display: flex;
     flex-direction: column;
@@ -21,6 +25,23 @@
         opacity: 1;
         pointer-events: auto;
     }
+
+
+    * {
+        box-sizing: border-box;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    button {
+        padding: 0;
+        outline: none;
+    }
+
 }
 
 .skySlider-close {
@@ -32,8 +53,6 @@
     right: 24px;
     cursor: pointer;
 
-    // background: tomato;
-    // transition: all 0.2s;
 
     &:hover {
         svg {
@@ -128,12 +147,7 @@
     padding: 0 8px;
     transition: all 200ms ease-out;
     transform: translateY(0);
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     cursor: pointer;
-
-    &:hover {
-        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-    }
 
     &.is-current {
         transform: translateY(-15px);

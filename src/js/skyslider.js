@@ -533,6 +533,6 @@
 
 
 let modal = new SkySlider({
-	thumbnailsItemCount: 7,
+	thumbnailsItemCount: 5,
 	showThumbnails: true
 });
