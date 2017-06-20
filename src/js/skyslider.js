@@ -232,13 +232,7 @@
 			dir = (dist < 0) ? 'left' : 'right';
 
 			if (dist < -100 || dist > 100) {
-				_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, liCount-1) : Math.max(_.currentIndex-1,0);
-				_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
-
-				if (_.options.showThumbnails) {
-					changeActiveThumbnail();
-					moveBeltWithArrow();
-				}
+				changeImg(liCount, dir);
 			}
 		});
 
@@ -272,16 +266,11 @@
 			elepsedTime = new Date().getTime() - startTime;
 
 			if (elepsedTime < allowedTime && (dist < -150 || dist > 150)) {
-				_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, liCount-1) : Math.max(_.currentIndex-1, 0);
-				_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
-
-				if (_.options.showThumbnails) {
-					changeActiveThumbnail();
-					moveBeltWithArrow();
-				}
+				changeImg(liCount, dir);
 			}
 		});
 	}
+
 
 	function sliderArrows() {
 		let liLength = _.sliderBelt.children.length,
@@ -295,12 +284,7 @@
 				_.currentIndex = 0;
 			}
 
-			_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
-
-			if (_.options.showThumbnails) {
-				changeActiveThumbnail();
-				moveBeltWithArrow();
-			}
+			changeImg(liLength);
 		});
 
 		_.next.addEventListener('click', () => {
@@ -311,12 +295,7 @@
 				_.currentIndex = liLength-1;
 			}
 
-			_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
-
-			if (_.options.showThumbnails) {
-				changeActiveThumbnail();
-				moveBeltWithArrow();
-			}
+			changeImg(liLength);
 		});
 	}
 
@@ -326,11 +305,6 @@
 
 		let offset = _.currentIndex - (Math.floor(_.options.thumbnailsItemCount / 2));
 
-		/**
-		 * rewrite!!!
-		 * -----------
-		 * correctly work only: _.options.thumbnailsItemCount = 5
-		 */
 		if (offset >= 0 && offset <= (thumbnails.length - _.options.thumbnailsItemCount)) {
 			_.thumbnailsList.style.transform = `translate3d(-${offset * thumbnailWidth}px,0,0)`;
 		}
@@ -355,11 +329,7 @@
 
 				if (_.currentIndex <= 0) _.currentIndex = 0;
 
-				_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
-				if (_.options.showThumbnails) {
-					changeActiveThumbnail();
-					moveBeltWithArrow();
-				}
+				changeImg(liLength);
 			}
 			if (e.keyCode == 39) {
 				_.currentIndex++;
@@ -367,13 +337,30 @@
 
 				if (_.currentIndex == liLength) _.currentIndex = liLength-1;
 
-				_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
-				if (_.options.showThumbnails) {
-					changeActiveThumbnail();
-					moveBeltWithArrow();
-				}
+				changeImg(liLength);
 			}
 		});
+	}
+
+
+	/**
+	 * Direction and movement of the Slider
+	 * 
+	 * @param {Number} count - total numbers of elements
+	 * @param {String} dir - 'left' or 'right'
+	 */
+	function changeImg(count, dir = null) {
+		
+		if (dir) {
+			_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, count-1) : Math.max(_.currentIndex-1,0);
+		}
+
+		_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
+
+		if (_.options.showThumbnails) {
+			changeActiveThumbnail();
+			moveBeltWithArrow();
+		}
 	}
 
 
