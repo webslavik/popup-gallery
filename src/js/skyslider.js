@@ -75,12 +75,21 @@
 	function open() {
 		initSliderWith();
 
+
+		/**
+		 * HACK
+		 * ----
+		 * delay add class
+		 */
+		setTimeout(() => {
+			_.overlay.classList.add('is-open');
+		}, 0.5);
+
 		if (_.options.showThumbnails) {
 			changeActiveThumbnail();
 			moveBeltWithArrow();
 		}
-		
-		_.overlay.classList.add('is-open');
+
 	}
 
 
@@ -213,22 +222,25 @@
 
 
 		/**
-		 * 	for Mouse
+		 * for Mouse
+		 * ---------
 		 */
-		_.slider.addEventListener('mousedown', (e) => {
+		_.sliderBelt.addEventListener('mousedown', (e) => {
 			e.preventDefault();
 
 			beltOffset = parseInt(getTransformValue(_.sliderBelt));
 			start = e.pageX;
 		});
 
-		_.slider.addEventListener('mouseup', (e) => {
+		_.sliderBelt.addEventListener('mouseup', (e) => {
 			e.stopPropagation();
+
+			const DRAG__OFFSET = liElements[_.currentIndex].querySelector('img').offsetWidth * 0.3;
 
 			dist = e.pageX - start;
 			dir = (dist < 0) ? 'left' : 'right';
-
-			if (dist < -100 || dist > 100) {
+			
+			if (dist < DRAG__OFFSET || dist > DRAG__OFFSET) {
 				changeImg(liCount, dir);
 			}
 		});
@@ -238,7 +250,7 @@
 		 * for Touch
 		 * ---------
 		 */
-		_.slider.addEventListener('touchstart', (e) => {
+		_.sliderBelt.addEventListener('touchstart', (e) => {
 			e.preventDefault();
 
 			dist = 0;
@@ -248,7 +260,7 @@
 			startTime = new Date().getTime();
 		});
 
-		_.slider.addEventListener('touchmove', (e) => {
+		_.sliderBelt.addEventListener('touchmove', (e) => {
 			e.preventDefault();
 
 			let touchObj = e.changedTouches[0]
@@ -256,7 +268,7 @@
 			dir = (dist < 0) ? 'left' : 'right';
 		});
 
-		_.slider.addEventListener('touchend', (e) => {
+		_.sliderBelt.addEventListener('touchend', (e) => {
 			e.preventDefault();
 
 			elepsedTime = new Date().getTime() - startTime;
