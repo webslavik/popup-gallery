@@ -24,6 +24,10 @@ img {
     &.is-open {
         opacity: 1;
         pointer-events: auto;
+
+        .skySlider-slider-belt {
+               transition: all 330ms ease-out;
+        }
     }
 
 
@@ -118,6 +122,8 @@ img {
     height: 100%;
     text-align: center;
     cursor: pointer;
+    transition: all 0ms ease-out;
+
 }
 
 .skySlider-slide {
