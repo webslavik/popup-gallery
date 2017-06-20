@@ -98,24 +98,11 @@
 		_.overlay.addEventListener('click', (e) => {
 			let target = e.target;
 
-			/**
-			 * refactoring
-			 * -----------
-			 * need optimize
-			 */
-			// if (target.classList.contains('skySlider-close') || target.classList.contains('skySlider-slider-wrap') || target.tagName == 'path' || target.tagName == 'svg') {
-			// 	_.overlay.classList.remove('is-open');
-			// }
+			if (!target.classList.contains('skySlider-overlay') && !target.classList.contains('skySlider-slider-wrap')) {
+				return false;	
+			}
 
-			if (target.classList.contains('skySlider-close') || target.classList.contains('skySlider-slider-wrap')) {
-				_.overlay.classList.remove('is-open');
-			}
-			
-			if (!target.classList.contains('skySlider-overlay')) {
-				return false;
-			}
 			_.overlay.classList.remove('is-open');
-
 		});
 
 		document.querySelector('.skySlider-close').addEventListener('click', (e) => {
@@ -252,7 +239,7 @@
 			dist = e.pageX - start;
 			dir = (dist < 0) ? 'left' : 'right';
 			
-			if (dist < DRAG__OFFSET || dist > DRAG__OFFSET) {
+			if (dist < -DRAG__OFFSET || dist > DRAG__OFFSET) {
 				changeImg(dir);
 			}
 
