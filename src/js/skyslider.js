@@ -57,6 +57,7 @@
 		moveSlider();
 		sliderArrows();
 		keyboardNavigation();
+		close();
 		if (_.options.showThumbnails) {
 			moveThumbnailsBelt();
 			thumbnailsActions();
@@ -74,7 +75,7 @@
 
 	function open() {
 		_.overlay.classList.add('is-open');
-		close();
+		
 		initSliderWith();
 
 		if (_.options.showThumbnails) {
@@ -109,7 +110,7 @@
 
 		});
 
-		document.querySelector('.skySlider-close').addEventListener('click', function(e) {
+		document.querySelector('.skySlider-close').addEventListener('click', (e) => {
 			_.overlay.classList.remove('is-open');
 		});
 	}
@@ -180,10 +181,7 @@
 
 		for (let i = 0; i < _.imagesUrl.length; i++) {
 			_.thumbnail = document.createElement('li');
-			_.thumbnail.classList.add('skySlider-thumbnail')
-			if (_.currentIndex === i) {
-				_.thumbnail.classList.add('is-current');
-			}
+			_.thumbnail.classList.add('skySlider-thumbnail');
 			_.img = document.createElement('img');
 			_.img.setAttribute('src', _.imagesUrl[i]);
 			_.thumbnail.appendChild(_.img);
@@ -252,6 +250,7 @@
 		_.slider.addEventListener('touchstart', (e) => {
 			e.preventDefault();
 
+			dist = 0;
 			_.sliderBelt.style.transition = 'all 300ms ease-out';
 			beltOffset = parseInt(getTransformValue(_.sliderBelt));
 			let touchObj = e.changedTouches[0];
@@ -275,7 +274,6 @@
 			if (elepsedTime < allowedTime && (dist < -150 || dist > 150)) {
 				_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, liCount-1) : Math.max(_.currentIndex-1, 0);
 				_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
-				dist = 0;
 
 				if (_.options.showThumbnails) {
 					changeActiveThumbnail();
