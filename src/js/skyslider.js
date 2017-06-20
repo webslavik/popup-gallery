@@ -215,8 +215,9 @@
 			beltOffset,
 			start,
 			dist,
+			totalDist,
 			dir,
-			allowedTime = 400,
+			allowedTime = 2000,
 			startTime,
 			elepsedTime;
 
@@ -230,7 +231,18 @@
 
 			beltOffset = parseInt(getTransformValue(_.sliderBelt));
 			start = e.pageX;
+
+			_.sliderBelt.addEventListener('mousemove', onMouseMove);
 		});
+
+		function onMouseMove(e) {
+			e.preventDefault();
+
+			dist = e.pageX - start;
+			totalDist = dist + beltOffset;
+			
+			_.sliderBelt.style.transform = `translate3d(${totalDist}px,0,0)`;
+		}
 
 		_.sliderBelt.addEventListener('mouseup', (e) => {
 			e.stopPropagation();
@@ -243,7 +255,15 @@
 			if (dist < DRAG__OFFSET || dist > DRAG__OFFSET) {
 				changeImg(liCount, dir);
 			}
+
+			_.sliderBelt.removeEventListener('mousemove', onMouseMove);
 		});
+
+
+		_.sliderBelt.addEventListener('mouseleave', () => {
+			_.sliderBelt.removeEventListener('mousemove', onMouseMove);
+		});
+
 
 
 		/**
@@ -266,6 +286,14 @@
 			let touchObj = e.changedTouches[0]
 			dist = touchObj.pageX - start;
 			dir = (dist < 0) ? 'left' : 'right';
+
+
+			/**
+			 * Need test on device
+			 * -------------------
+			 */
+			totalDist = dist + beltOffset;
+			_.sliderBelt.style.transform = `translate3d(${totalDist}px,0,0)`;
 		});
 
 		_.sliderBelt.addEventListener('touchend', (e) => {
@@ -273,7 +301,7 @@
 
 			elepsedTime = new Date().getTime() - startTime;
 
-			if (elepsedTime < allowedTime && (dist < -150 || dist > 150)) {
+			if (elepsedTime < allowedTime && (dist < -50 || dist > 50)) {
 				changeImg(liCount, dir);
 			}
 		});
