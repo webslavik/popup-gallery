@@ -144,6 +144,7 @@ img {
 
 .skySlider-thumbnail {
   width: 115px;
+  height: 100px;
   padding: 0 8px;
   -webkit-transition: all 200ms ease-out;
   -o-transition: all 200ms ease-out;
@@ -151,19 +152,64 @@ img {
   -webkit-transform: translateY(0);
       -ms-transform: translateY(0);
           transform: translateY(0);
-  cursor: pointer; }
+  cursor: pointer;
+  overflow: hidden; }
   .skySlider-thumbnail.is-current {
     -webkit-transform: translateY(-15px);
         -ms-transform: translateY(-15px);
             transform: translateY(-15px); }
+  .skySlider-thumbnail img {
+    width: 115px;
+    height: 100px; }
 
 @media only screen and (max-width: 767px) {
   .skySlider-thumbnails-wrap {
     display: none; }
+  .skySlider-close {
+    top: 24px; }
+    .skySlider-close svg {
+      width: 48px;
+      height: 48px; }
+  .skySlider-slider {
+    height: 60%; }
   .skySlider-arrow svg {
-    width: 24px;
-    height: 24px; }
+    width: 32px;
+    height: 32px; }
   .skySlider-arrow.next {
     right: 0; }
   .skySlider-arrow.prev {
     left: 0; } }
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  .skySlider-slider-wrap {
+    height: 60%; }
+  .skySlider-close {
+    top: 32px;
+    right: 32px; }
+    .skySlider-close svg {
+      width: 64px;
+      height: 64px; }
+  .skySlider-slider {
+    height: 60%; }
+  .skySlider-arrow {
+    top: -webkit-calc(43% - 28px);
+    top: calc(43% - 28px); }
+    .skySlider-arrow svg {
+      width: 48px;
+      height: 48px; }
+    .skySlider-arrow.next {
+      right: 8px; }
+    .skySlider-arrow.prev {
+      left: 8px; } }
+
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) {
+  .skySlider-slider {
+    height: 35%; } }
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
+  .skySlider-slider {
+    height: 40%; } }
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+  .skySlider-slider {
+    height: 50%; } }

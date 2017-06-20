@@ -559,10 +559,3 @@
 	 */
 	window.SkySlider = SkySlider;
 })()
-
-
-
-let modal = new SkySlider({
-	thumbnailsItemCount: 5,
-	showThumbnails: true
-});

@@ -63,7 +63,7 @@ gulp.task('clean', function() {
 
 
 gulp.task('build', ['clean', 'sass'], function() {
-	let buildJS = gulp.src('src/js/*.js')
+	let buildJS = gulp.src('src/js/skyslider.js')
 		.pipe(babel({presets: ['es2015']}))
 		.pipe(uglify())
 		.pipe(rename({
