@@ -24,7 +24,7 @@
 		 */
 		_.currentIndex = null;
 		_.sliderWidth = null;
-		_.slidesCount = null;
+		_.elementsNumber = null;
 		_.prevArrow = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250.738 250.738"><path d="M96.633 125.37l95.053-94.534c7.1-7.055 7.1-18.492 0-25.546-7.1-7.054-18.613-7.054-25.714 0L58.99 111.69c-3.785 3.758-5.488 8.758-5.24 13.68-.248 4.92 1.455 9.92 5.24 13.68L165.97 245.448c7.1 7.055 18.613 7.055 25.714 0 7.1-7.054 7.1-18.49 0-25.544L96.633 125.37z" fill-rule="evenodd" clip-rule="evenodd"/></svg>';
 		_.nextArrow = '<svg xmlns="http://www.w3.org/2000/svg" width="451.846" height="451.847" viewBox="0 0 451.846 451.847"><path d="M345.44 248.292l-194.286 194.28c-12.36 12.366-32.397 12.366-44.75 0-12.354-12.353-12.354-32.39 0-44.743l171.914-171.91-171.91-171.903c-12.353-12.36-12.353-32.394 0-44.748 12.355-12.36 32.392-12.36 44.75 0l194.288 194.283c6.177 6.18 9.262 14.27 9.262 22.366 0 8.098-3.09 16.195-9.267 22.372z"/></svg>';
 		_.crossIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M437.02 74.98C388.666 26.63 324.38 0 256 0S123.333 26.63 74.98 74.98 0 187.62 0 256s26.63 132.667 74.98 181.02C123.333 485.37 187.62 512 256 512s132.667-26.63 181.02-74.98C485.37 388.666 512 324.38 512 256s-26.63-132.668-74.98-181.02zM256 470.637C137.65 470.636 41.364 374.35 41.364 256S137.65 41.364 256 41.364 470.636 137.65 470.636 256 374.35 470.636 256 470.636z"/><path d="M341.22 170.78c-8.077-8.076-21.172-8.076-29.25 0L170.78 311.97c-8.077 8.078-8.077 21.173 0 29.25 4.038 4.04 9.332 6.058 14.625 6.058s10.587-2.02 14.625-6.058l141.19-141.19c8.076-8.077 8.076-21.172 0-29.25z"/><path d="M341.22 311.97L200.03 170.78c-8.077-8.076-21.173-8.076-29.25 0-8.076 8.077-8.076 21.172 0 29.25l141.19 141.19a20.616 20.616 0 0 0 14.626 6.058c5.293 0 10.586-2.02 14.625-6.058 8.076-8.077 8.076-21.172 0-29.25z"/></svg>';
@@ -51,7 +51,8 @@
 	function init() {
 		let el = document.querySelector('.skySlider'),
 			children = el.children;
-
+			
+		_.elementsNumber = children.length;
 		_.imagesUrl = getImagesUrl(el.querySelectorAll('img'));
 
 		create();
@@ -87,7 +88,7 @@
 
 		if (_.options.showThumbnails) {
 			changeActiveThumbnail();
-			moveBeltWithArrow();
+			goToCurrentThumbnail();
 		}
 
 	}
@@ -203,14 +204,13 @@
 	function initSliderWith() { 
 		_.sliderWidth = _.slider.offsetWidth;
 
-		_.sliderBelt.style.width = `${_.sliderWidth * _.sliderBelt.children.length}px`;
+		_.sliderBelt.style.width = `${_.sliderWidth * _.elementsNumber}px`;
 		_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
 	}
 
 	function moveSlider() {
 		let sliderWidth = _.slider.offsetWidth,
 			liElements = _.sliderBelt.children,
-			liCount = liElements.length,
 			liWidth = liElements[0].offsetWidth,
 			beltOffset,
 			start,
@@ -253,7 +253,7 @@
 			dir = (dist < 0) ? 'left' : 'right';
 			
 			if (dist < DRAG__OFFSET || dist > DRAG__OFFSET) {
-				changeImg(liCount, dir);
+				changeImg(dir);
 			}
 
 			_.sliderBelt.removeEventListener('mousemove', onMouseMove);
@@ -302,15 +302,14 @@
 			elepsedTime = new Date().getTime() - startTime;
 
 			if (elepsedTime < allowedTime && (dist < -50 || dist > 50)) {
-				changeImg(liCount, dir);
+				changeImg(dir);
 			}
 		});
 	}
 
 
 	function sliderArrows() {
-		let liLength = _.sliderBelt.children.length,
-			liWidth = _.li.offsetWidth;
+		let liWidth = _.li.offsetWidth;
 
 		_.prev.addEventListener('click', () => {
 			_.currentIndex--;
@@ -319,42 +318,24 @@
 				_.currentIndex = 0;
 			}
 
-			changeImg(liLength);
+			changeImg();
 		});
 
 		_.next.addEventListener('click', () => {
 			_.currentIndex++;
 
-			if (_.currentIndex == liLength) {
-				_.currentIndex = liLength-1;
+			if (_.currentIndex == _.elementsNumber) {
+				_.currentIndex = _.elementsNumber-1;
 			}
 
-			changeImg(liLength);
+			changeImg();
 		});
 	}
 
-	function moveBeltWithArrow() {
-		let thumbnails = _.thumbnailsList.children,
-			thumbnailWidth = thumbnails[0].offsetWidth;
-
-		let offset = _.currentIndex - (Math.floor(_.options.thumbnailsItemCount / 2));
-
-		if (offset >= 0 && offset <= (thumbnails.length - _.options.thumbnailsItemCount)) {
-			_.thumbnailsList.style.transform = `translate3d(-${offset * thumbnailWidth}px,0,0)`;
-		}
-		if (_.currentIndex == 0 || _.currentIndex == 1) {
-			_.thumbnailsList.style.transform = `translate3d(-0,0,0)`;
-		}
-		if (_.currentIndex == (thumbnails.length - 1) || _.currentIndex == (thumbnails.length - 2)) {
-			_.thumbnailsList.style.transform = `translate3d(-${(thumbnails.length - _.options.thumbnailsItemCount) * thumbnailWidth}px,0,0)`;
-		}
-	}
 
 	function keyboardNavigation() {
-		let body = document.querySelector('body');
-		let	liLength = _.sliderBelt.children.length,
+		let body = document.querySelector('body'),
 			liWidth = _.li.offsetWidth;
-
 
 		body.addEventListener('keyup', (e) => {
 			if (e.keyCode == 37) {
@@ -362,14 +343,14 @@
 
 				if (_.currentIndex <= 0) _.currentIndex = 0;
 
-				changeImg(liLength);
+				changeImg();
 			}
 			if (e.keyCode == 39) {
 				_.currentIndex++;
 
-				if (_.currentIndex == liLength) _.currentIndex = liLength-1;
+				if (_.currentIndex == _.elementsNumber) _.currentIndex = _.elementsNumber - 1;
 
-				changeImg(liLength);
+				changeImg();
 			}
 		});
 	}
@@ -378,20 +359,19 @@
 	/**
 	 * Direction and movement of the Slider
 	 * 
-	 * @param {Number} count - total numbers of elements
 	 * @param {String} dir - 'left' or 'right'
 	 */
-	function changeImg(count, dir = null) {
+	function changeImg(dir = null) {
 
 		if (dir) {
-			_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, count-1) : Math.max(_.currentIndex-1,0);
+			_.currentIndex = (dir == 'left') ? Math.min(_.currentIndex+1, _.elementsNumber-1) : Math.max(_.currentIndex-1,0);
 		}
 
 		_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
 
 		if (_.options.showThumbnails) {
 			changeActiveThumbnail();
-			moveBeltWithArrow();
+			goToCurrentThumbnail();
 		}
 	}
 
@@ -414,7 +394,7 @@
 				_.currentIndex = index;
 				_.sliderBelt.style.transform = `translate3d(-${_.currentIndex * _.sliderWidth}px,0,0)`;
 
-				moveBeltWithArrow();
+				goToCurrentThumbnail();
 			});
 		});
 	}
@@ -432,7 +412,6 @@
 		let self = _; // test
 
 		let thumbnails = _.thumbnailsList.children,
-			thumbnailsLength = thumbnails.length,
 			thumbnailWidth = thumbnails[0].offsetWidth,
 			allowedTime = 400,
 			listOffset,
@@ -441,7 +420,7 @@
 			totalDist;
 
 		_.thumbnailsWrap.style.width = _.options.thumbnailsItemCount * thumbnailWidth + 'px';
-		_.thumbnailsList.style.width = thumbnailsLength * thumbnailWidth + 'px';
+		_.thumbnailsList.style.width = _.elementsNumber * thumbnailWidth + 'px';
 		_.thumbnailsList.style.transform = 'translate3d(0,0,0)';
 
 		/**
@@ -463,8 +442,8 @@
 			dist = e.pageX - start;
 			totalDist = dist + listOffset;
 
-			if (totalDist <= -(thumbnailWidth * thumbnailsLength - thumbnailWidth * self.options.thumbnailsItemCount)) {
-				self.thumbnailsList.style.transform = `translate3d(-${(thumbnailWidth * thumbnailsLength) - (thumbnailWidth * self.options.thumbnailsItemCount)}px,0,0)`;
+			if (totalDist <= -(thumbnailWidth * _.elementsNumber - thumbnailWidth * self.options.thumbnailsItemCount)) {
+				self.thumbnailsList.style.transform = `translate3d(-${(thumbnailWidth * _.elementsNumber) - (thumbnailWidth * self.options.thumbnailsItemCount)}px,0,0)`;
 			} else if (totalDist >= 0) {
 				self.thumbnailsList.style.transform = `translate3d(0,0,0)`;			
 			} else {
@@ -500,8 +479,8 @@
 			let touchObj = e.changedTouches[0];
 			dist = touchObj.pageX - start;
 			totalDist = dist + listOffset;
-			if (totalDist <= -(thumbnailWidth * thumbnailsLength - thumbnailWidth * self.options.thumbnailsItemCount)) {
-				self.thumbnailsList.style.transform = `translate3d(-${(thumbnailWidth * thumbnailsLength) - (thumbnailWidth * self.options.thumbnailsItemCount)}px,0,0)`;
+			if (totalDist <= -(thumbnailWidth * _.elementsNumber - thumbnailWidth * self.options.thumbnailsItemCount)) {
+				self.thumbnailsList.style.transform = `translate3d(-${(thumbnailWidth * _.elementsNumber) - (thumbnailWidth * self.options.thumbnailsItemCount)}px,0,0)`;
 			} else if (totalDist >= 0) {
 				self.thumbnailsList.style.transform = `translate3d(0,0,0)`;			
 			} else {
@@ -509,7 +488,21 @@
 			}
 		});
 	}
-	
+
+
+	/**
+	 * Move Thumbnails Belt depending on current slide
+	 */
+	function goToCurrentThumbnail() {
+		let thumbnailWidth = _.thumbnailsList.children[0].offsetWidth;
+
+		let beltOffset = _.currentIndex - (Math.floor(_.options.thumbnailsItemCount / 2));
+
+		if (beltOffset >= 0 && beltOffset <= (_.elementsNumber - _.options.thumbnailsItemCount)) {
+			_.thumbnailsList.style.transform = `translate3d(-${beltOffset * thumbnailWidth}px,0,0)`;
+		}
+	}
+
 
 	/**
 	 * Get images url
