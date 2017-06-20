@@ -499,6 +499,7 @@
 	 * Get images url
 	 * 
 	 * @param {Nodes} imagesEl
+	 * @returns {Array} imagesUrl - src for slider images
 	 */
 	function getImagesUrl(imagesEl) {
 		let imagesUrl = [];
@@ -515,6 +516,7 @@
 	 * 
 	 * @param {object} source -  _.options
 	 * @param {object} properties - arguments[0]
+	 * @returns {Object} source - check User and Custom settings
 	 */
 	function extendDefaults(source, properties) {
 		for (let property in properties) {
@@ -526,6 +528,7 @@
 				source[property] = properties[property];
 			}
 		}
+
 		return source;
 	}
 
@@ -534,6 +537,7 @@
 	 * Get translate3d value
 	 * 
 	 * @param {Node} el
+	 * @returns {Array} xyzArray[0] - the first value of the translate3d
 	 */
 	function getTransformValue(el) {
 		let transform = el.style.transform;
