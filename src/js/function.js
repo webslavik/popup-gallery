@@ -1,8 +1,11 @@
 (function() {
+    let gallery_1 = new SkySlider('.first-gallery');
 
-    let modal = new SkySlider({
-        thumbnailsItemCount: 4,
-        showThumbnails: true
+    let gallery_2 = new SkySlider('#second-gallery', {
+        showThumbnails: true,
+        thumbnailsItemCount: 6,
     });
 
+    console.dir(gallery_1);
+    console.dir(gallery_2);
 })();

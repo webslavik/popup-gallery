@@ -1,20 +1,16 @@
-
 // Breakpoint Sass
 @import '../../node_modules/breakpoint-sass/stylesheets/_breakpoint.scss';
-
 
 // Utilites
 @import 'utilites/vars';
 
-
 // Base
 @import 'base/normalize';
 @import 'base/tags';
-
+@import 'base/typography';
 
 // Layout
 @import 'layout/grid';
-
 
 // Modules
 @import 'modules/photos';
