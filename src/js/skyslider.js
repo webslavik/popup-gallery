@@ -20,14 +20,14 @@
             return;
         }
 
-        // _.selector = selector;
-
         /**
 		 * Private properties
 		 * -------------------
 		 */
         _.selector = selector;
-        _.currentIndex = null;
+        _.currrentElement = null;
+        _.currentIndex = 1;
+        _.imagesUrl = null;
         _.sliderWidth = null;
         _.elementsNumber = null;
         _.prevArrow =
@@ -55,32 +55,47 @@
     }
 
     function init() {
-        let el = document.querySelector(_.selector),
-            children = el.children;
-
-        _.elementsNumber = children.length;
-        _.imagesUrl = getImagesUrl(el.querySelectorAll('img'));
+        let parents = document.querySelectorAll(_.selector);
 
         create();
-        moveSlider();
-        sliderArrows();
-        keyboardNavigation();
-        close();
-        if (_.options.showThumbnails) {
-            moveThumbnailsBelt();
-            thumbnailsActions();
-        }
+        Array.from(parents, (el) => {
+            let children = el.children;
 
-        Array.from(children, (el, index) => {
-            el.addEventListener('click', e => {
-                _.currentIndex = index;
-                open();
-            });
+            Array.from(children, (el, index) => {
+                el.addEventListener('click', e => {
+                    _.currentIndex = index;
+                    _.currrentElement = el;
+                    open();
+                });
+            }) 
         });
     }
 
     function open() {
-        initSliderWith();
+        
+        let parent = _.currrentElement.parentNode;
+        _.imagesUrl = getImagesUrl(parent.querySelectorAll('img'));
+        _.elementsNumber = _.imagesUrl.length;
+
+        for (let i = 0; i < _.imagesUrl.length; i++) {
+            _.li = document.createElement('li');
+            _.li.classList.add('skySlider-slide');
+            _.img = document.createElement('img');
+            _.img.setAttribute('src', _.imagesUrl[i]);
+            _.li.appendChild(_.img);
+            _.sliderBelt.appendChild(_.li);
+        }
+
+        if (_.options.showThumbnails) {
+            for (let i = 0; i < _.imagesUrl.length; i++) {
+                _.thumbnail = document.createElement('li');
+                _.thumbnail.classList.add('skySlider-thumbnail');
+                _.img = document.createElement('img');
+                _.img.setAttribute('src', _.imagesUrl[i]);
+                _.thumbnail.appendChild(_.img);
+                _.thumbnailsList.appendChild(_.thumbnail);
+            }
+        }
 
         /**
 		 * HACK
@@ -91,7 +106,14 @@
             _.overlay.classList.add('is-open');
         }, 0.5);
 
+        initSliderWith();
+        moveSlider();
+        sliderArrows();
+        keyboardNavigation();
+        close();
         if (_.options.showThumbnails) {
+            moveThumbnailsBelt();
+            thumbnailsActions();
             changeActiveThumbnail();
             goToCurrentThumbnail();
         }
@@ -109,19 +131,22 @@
             }
 
             _.overlay.classList.remove('is-open');
+            _.thumbnailsList.innerHTML = '';
+            _.sliderBelt.innerHTML = '';
         });
 
         document
             .querySelector('.skySlider-close')
             .addEventListener('click', e => {
                 _.overlay.classList.remove('is-open');
+                _.thumbnailsList.innerHTML = '';
+                _.sliderBelt.innerHTML = '';
             });
     }
 
     function create() {
         _.overlay = document.createElement('div');
         _.overlay.classList.add('skySlider-overlay');
-        _.overlay.dataset.currentGallery = _.selector;
 
         _.closeBtn = document.createElement('button');
         _.closeBtn.classList.add('skySlider-close');
@@ -161,14 +186,14 @@
         _.sliderBelt.classList.add('skySlider-slider-belt');
         _.slider.appendChild(_.sliderBelt);
 
-        for (let i = 0; i < _.imagesUrl.length; i++) {
-            _.li = document.createElement('li');
-            _.li.classList.add('skySlider-slide');
-            _.img = document.createElement('img');
-            _.img.setAttribute('src', _.imagesUrl[i]);
-            _.li.appendChild(_.img);
-            _.sliderBelt.appendChild(_.li);
-        }
+        // for (let i = 0; i < _.imagesUrl.length; i++) {
+        //     _.li = document.createElement('li');
+        //     _.li.classList.add('skySlider-slide');
+        //     _.img = document.createElement('img');
+        //     _.img.setAttribute('src', _.imagesUrl[i]);
+        //     _.li.appendChild(_.img);
+        //     _.sliderBelt.appendChild(_.li);
+        // }
 
         return _.sliderWrap;
     }
@@ -180,14 +205,14 @@
         _.thumbnailsList = document.createElement('ul');
         _.thumbnailsList.classList.add('skySlider-thumbnails-list');
 
-        for (let i = 0; i < _.imagesUrl.length; i++) {
-            _.thumbnail = document.createElement('li');
-            _.thumbnail.classList.add('skySlider-thumbnail');
-            _.img = document.createElement('img');
-            _.img.setAttribute('src', _.imagesUrl[i]);
-            _.thumbnail.appendChild(_.img);
-            _.thumbnailsList.appendChild(_.thumbnail);
-        }
+        // for (let i = 0; i < _.imagesUrl.length; i++) {
+        //     _.thumbnail = document.createElement('li');
+        //     _.thumbnail.classList.add('skySlider-thumbnail');
+        //     _.img = document.createElement('img');
+        //     _.img.setAttribute('src', _.imagesUrl[i]);
+        //     _.thumbnail.appendChild(_.img);
+        //     _.thumbnailsList.appendChild(_.thumbnail);
+        // }
         _.thumbnailsWrap.appendChild(_.thumbnailsList);
 
         return _.thumbnailsWrap;
@@ -195,6 +220,8 @@
 
     function initSliderWith() {
         _.sliderWidth = _.slider.offsetWidth;
+
+        // console.log(`${_.sliderWidth * _.elementsNumber}px`);
 
         _.sliderBelt.style.width = `${_.sliderWidth * _.elementsNumber}px`;
         _.sliderBelt.style.transform = `translate3d(-${_.currentIndex *
@@ -409,7 +436,7 @@
             totalDist;
 
         _.thumbnailsWrap.style.width =
-            _.options.thumbnailsItemCount * thumbnailWidth + 'px';
+        _.options.thumbnailsItemCount * thumbnailWidth + 'px';
         _.thumbnailsList.style.width = _.elementsNumber * thumbnailWidth + 'px';
         _.thumbnailsList.style.transform = 'translate3d(0,0,0)';
 
